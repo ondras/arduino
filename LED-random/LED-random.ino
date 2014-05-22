@@ -33,7 +33,7 @@ class Point {
 
 void setup() {
 	lc.shutdown(0, false);
-	lc.setIntensity(0, 0);
+	lc.setIntensity(0, 15);
 }
 
 Point tail(0, 0);
