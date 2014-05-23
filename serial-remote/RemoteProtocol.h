@@ -18,12 +18,32 @@
 			- last 3 bits define row index
 		- __011xxx set a column: needs 1 more byte (column configuration)
 			- last 3 bits define column index
-		- __100xxx set the whole matrix: needs 8 more bytes
+		- __100xxx set the whole matrix: needs 8 more bytes (rows)
 		- __111xxx set brightness: needs 1 more byte (the brightness value)
+
+	EXAMPLES
+	========
 
 	Light the 0,0 LED:
 	byte 1: 00001001 = 0x9
 	byte 2: 00000000 = 0x0
+
+	Light the first LED row:
+	byte 1: 00010000 = 0x10
+	byte 2: 11111111 = 0xff
+
+	Light the first LED column:
+	byte 1: 00011000 = 0x18
+	byte 2: 11111111 = 0xff
+
+	Set LED intensity to full
+	byte 1: 00111000 = 0x38
+	byte 2: 00000111 = 0x7
+
+	Configure all LEDs at once
+	byte 1: 00100000 = 0x20
+	byte 2..9: 0xff
+
  */
 
 #define R_DEVICE		B11000000

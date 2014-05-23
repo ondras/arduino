@@ -11,11 +11,8 @@ void Remote::processByte(byte data) {
 	if (pending == 0) {
 		processControlByte(data, false);
 	} else {
-		Serial.println("got data byte");
 		size_t count = 0;
 		while (count < MAXLEN && buffer[count] != -1) { count++; }
-		Serial.println("count");
-		Serial.println(count);
 
 		buffer[count++] = data;
 		if (count == pending) { 
@@ -26,7 +23,6 @@ void Remote::processByte(byte data) {
 }
 
 void Remote::processControlByte(byte control, bool dataAvailable) {
-	Serial.println("processing control byte");
 	command = control;
 	switch (control & R_DEVICE) {
 		case R_DEVICE_LED:
@@ -40,7 +36,6 @@ void Remote::processControlByte(byte control, bool dataAvailable) {
 }
 
 void Remote::processControlLED(byte control, bool dataAvailable) {
-	Serial.println("processing control byte led");
 	switch (control & R_LED_OP) {
 		case R_LED_OP_CLEAR:
 			lc->clearDisplay(0);
@@ -48,26 +43,18 @@ void Remote::processControlLED(byte control, bool dataAvailable) {
 
 		case R_LED_OP_ONE:
 			if (dataAvailable) {
-				Serial.println("data here");
 				byte x = (buffer[0] >> 4);
 				byte y = buffer[0] & 0xF;
 				bool value = control & 1;
-				Serial.println("x");
-				Serial.println(x);
-				Serial.println("y");
-				Serial.println(y);
-				Serial.println("value");
-				Serial.println(value);
 				lc->setLed(0, y, x, value);
 			} else {
-				Serial.println("waiting for one");
 				waitFor(1);
 			}
 		break;
 
 		case R_LED_OP_ROW:
 			if (dataAvailable) {
-
+				lc->setRow(0, control & 0x7, buffer[0]);
 			} else {
 				return waitFor(1);
 			}
@@ -75,7 +62,7 @@ void Remote::processControlLED(byte control, bool dataAvailable) {
 
 		case R_LED_OP_COL:
 			if (dataAvailable) {
-
+				lc->setColumn(0, control & 0x7, buffer[0]);
 			} else {
 				return waitFor(1);
 			}
@@ -83,7 +70,9 @@ void Remote::processControlLED(byte control, bool dataAvailable) {
 
 		case R_LED_OP_ALL:
 			if (dataAvailable) {
-
+				for (size_t i=0; i<N; i++) {
+					lc->setRow(0, i, buffer[i]);
+				}
 			} else {
 				return waitFor(N);
 			}
@@ -91,7 +80,7 @@ void Remote::processControlLED(byte control, bool dataAvailable) {
 
 		case R_LED_OP_BRIGHT:
 			if (dataAvailable) {
-
+				lc->setIntensity(0, buffer[0]);
 			} else {
 				return waitFor(1);
 			}
