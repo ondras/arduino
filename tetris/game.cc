@@ -18,11 +18,11 @@ void Game::step() {
 	this->piece.action(action);
 
 	if (this->piece.fits(&this->pit)) { /* normal movement */
-		old.clear(lc);
-		this->piece.draw(lc);
+		old.clear(this->lc);
+		this->piece.draw(this->lc);
 	} else { /* cannot move, finish pit and get new piece */
-		this->piece.addTo(&this->pit);
-		this->pit.cleanup(); /* FIXME score */
+		old.addTo(&this->pit);
+		this->pit.cleanup(this->lc); /* FIXME score */
 
 		this->newPiece();
 		if (!this->piece.fits(&this->pit)) { this->gameOver(); }

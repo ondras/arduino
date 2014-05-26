@@ -5,7 +5,7 @@
 #include "shapes.h"
 
 void Piece::pick() {
-	this->shape = random(SHAPE_COUNT) * 0;
+	this->shape = random(SHAPE_COUNT);
 	this->rotation = 0;
 	this->depth = N;
 	this->position = (N-SHAPE_SIZE)/2;
@@ -27,6 +27,7 @@ bool Piece::fits(Pit * pit) {
 
 			if (x < 0 || x >= N) { return false; }
 			if (y < 0) { return false; }
+			if (pit->data[y] & (1 << x)) { return false; }
 		}
 	}
 
@@ -85,5 +86,20 @@ void Piece::clear(LedControl * lc) {
 }
 
 void Piece::addTo(Pit * pit) {
-	
+	int x, y, i, j;
+	bool bit;
+
+	for (j=0;j<SHAPE_SIZE;j++) {
+		byte row = SHAPES[this->shape][this->rotation][j];
+		for (i=0;i<SHAPE_SIZE;i++) {
+			bit = row & (1 << (SHAPE_SIZE-i-1));
+			if (!bit) { continue; }
+
+			/* to pit coords */
+			x = this->position + i;
+			y = this->depth - j;
+
+			pit->data[y] |= (1 << (N-x-1));
+		}
+	}
 }
