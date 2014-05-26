@@ -23,6 +23,7 @@ class Game {
 		Piece piece;
 		Pit pit;
 		LedControl * lc;
+		int score;
 		bool playing;
 		void newPiece();
 		void gameOver();

@@ -1,7 +1,7 @@
 #include "game.h"
 #include <Arduino.h>
 
-Game::Game(LedControl * lc) : lc(lc), playing(false) {
+Game::Game(LedControl * lc) : lc(lc), playing(false), score(0) {
 }
 
 void Game::start() {
@@ -22,7 +22,12 @@ void Game::step() {
 		this->piece.draw(this->lc);
 	} else { /* cannot move, finish pit and get new piece */
 		old.addTo(&this->pit);
-		this->pit.cleanup(this->lc); /* FIXME score */
+		byte removed = this->pit.cleanup(this->lc); /* FIXME score */
+		for (byte i=0;i<removed;i++) {
+			this->score += 100 * (1 << i);
+		}
+		Serial.print("score: ");
+		Serial.println(this->score);
 
 		this->newPiece();
 		if (!this->piece.fits(&this->pit)) { this->gameOver(); }

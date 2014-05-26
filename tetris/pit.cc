@@ -30,7 +30,5 @@ byte Pit::cleanup(LedControl * lc) {
 		}
 	}
 
-	Serial.print(removed);
-
 	return removed;
 }
