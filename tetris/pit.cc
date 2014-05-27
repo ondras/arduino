@@ -29,5 +29,46 @@ byte Pit::cleanup(LedControl * lc) {
 }
 
 float Pit::score() {
-	return 0;
+	/* compute six values:
+	  - max = maximum column depth
+	  - cells = total occupied cells
+	  - weight = weighted sum of cells
+	  - holes = number of holes (cells with empty cell below them)
+	  - slope = sum of absolute column differences
+	  - maxslope = maximum of absolute slopes
+	*/
+	int max = 0, cells = 0, holes = 0, slope = 0, maxslope = 0, weight = 0;
+	byte mask, diff, x;
+
+	byte depths[N];
+	memset(depths, 0, sizeof(depths));
+
+	for (int depth=0; depth<N; depth++) {
+		byte row = this->data[depth];
+		if (!row) { continue; } /* skip empty */
+
+		max = depth+1; /* maximum depth */
+
+		for (x=0; x<N; x++) { /* for all columns */
+			mask = 1 << x;
+			if (!(row & mask)) { continue; } /* skip empty cells */
+
+			cells++; /* update cells */
+			weight += (depth+1); /* update weighted cells */
+			depths[x] = max(depths[x], depth+1); /* adjust column depths */
+
+			if (depth && !(this->data[depth-1] & mask)) { holes++; } /* look below for a hole */
+		}
+	}
+
+
+	for (x=0;x<N-1;x++) {
+		diff = abs(depths[x]-depths[x+1]);
+		slope += diff;
+		maxslope = max(maxslope, diff);
+	}
+
+	/* experimental weights */
+	return 20*holes + 1*max + 1*cells + 1*maxslope + 1*slope + 1*weight;
 }
+

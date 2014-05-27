@@ -18,18 +18,20 @@ bool Piece::fits(Pit * pit) {
 	bool bit;
 
 	for (j=0;j<SHAPE_SIZE;j++) {
+		y = this->depth - j;
+		if (y >= N) { continue; }
+
 		byte row = SHAPES[this->shape][this->rotation][j];
+
 		for (i=0;i<SHAPE_SIZE;i++) {
 			bit = row & (1 << (SHAPE_SIZE-i-1));
 			if (!bit) { continue; }
 
-			/* to pit coords */
 			x = this->position + i;
-			y = this->depth - j;
 
 			if (x < 0 || x >= N) { return false; }
 			if (y < 0) { return false; }
-			if (pit->data[y] & (1 << x)) { return false; }
+			if (pit->data[y] & (1 << (N-x-1))) { return false; }
 		}
 	}
 

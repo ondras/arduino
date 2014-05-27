@@ -11,7 +11,7 @@ class AI {
 		void newPiece(Piece *, Pit *);
 	private:
 		byte targetRotation;
-		byte targetPosition;
+		int targetPosition;
 };
 
 #endif
