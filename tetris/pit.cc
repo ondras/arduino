@@ -69,6 +69,6 @@ float Pit::score() {
 	}
 
 	/* experimental weights */
-	return 20*holes + 1*max + 1*cells + 1*maxslope + 1*slope + 1*weight;
+	return 20*holes + 2*max + 1*cells + 1*maxslope + 1*slope + 1*weight;
 }
 
