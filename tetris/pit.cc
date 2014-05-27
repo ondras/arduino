@@ -18,14 +18,16 @@ byte Pit::cleanup(LedControl * lc) {
 		}
 	}
 
-	if (lc != NULL && removed > 0) {
-		lc->clearDisplay(0);
-		for (index=0; index<N; index++) {
-			lc->setRow(0, N-index-1, this->data[index]);
-		}
-	}
+	if (lc != NULL && removed > 0) { this->draw(lc); }
 
 	return removed;
+}
+
+void Pit::draw(LedControl * lc) {
+	lc->clearDisplay(0);
+	for (byte index=0; index<N; index++) {
+		lc->setRow(0, N-index-1, this->data[index]);
+	}
 }
 
 float Pit::score() {

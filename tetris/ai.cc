@@ -27,6 +27,7 @@ void AI::newPiece(Piece * piece, Pit * pit) {
 	Piece tmpPiece = *piece;
 
 	for (byte rotation = 0; rotation < SHAPE_ROTATIONS; rotation++) {
+		tmpPit = *pit;
 		tmpPiece.rotation = rotation;
 
 		/* find left limit */

@@ -8,6 +8,7 @@
 class Pit {
 	public:
 		Pit();
+		void draw(LedControl * lc);
 		byte cleanup(LedControl * lc);
 		float score();
 		byte data[N];
