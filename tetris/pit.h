@@ -10,6 +10,7 @@ class Pit {
 		Pit();
 		void draw(LedControl * lc);
 		byte cleanup(LedControl * lc);
+		void clear(LedControl * lc);
 		float score();
 		byte data[N];
 };

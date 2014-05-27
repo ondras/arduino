@@ -18,13 +18,13 @@ class Game {
 		Game(LedControl *);
 		void start();
 		void step();
+		bool playing;
 
 	private:
 		AI ai;
 		Piece piece;
 		Pit pit;
 		LedControl * lc;
-		bool playing;
 		int score;
 		void newPiece();
 		void gameOver();

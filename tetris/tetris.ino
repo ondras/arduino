@@ -25,6 +25,12 @@ void setup() {
 
 
 void loop() {
-	delay(100);
 	game.step();
+
+	if (game.playing) {
+		delay(100);
+	} else {
+		delay(2000);
+		game.start();
+	}
 }

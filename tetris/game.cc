@@ -1,12 +1,13 @@
 #include "game.h"
 #include <Arduino.h>
 
-Game::Game(LedControl * lc) : lc(lc), playing(false), score(0) {
+Game::Game(LedControl * lc) : playing(false), lc(lc), score(0) {
 }
 
 void Game::start() {
-	this->playing = true;
+	this->pit.clear(lc);
 	this->newPiece();
+	this->playing = true;
 }
 
 void Game::step() {

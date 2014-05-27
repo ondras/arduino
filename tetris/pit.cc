@@ -1,7 +1,11 @@
 #include "pit.h"
 
 Pit::Pit() {
+}
+
+void Pit::clear(LedControl * lc) {
 	for (byte i=0;i<N;i++) { this->data[i] = 0; }
+	this->draw(lc);
 }
 
 byte Pit::cleanup(LedControl * lc) {
@@ -18,12 +22,13 @@ byte Pit::cleanup(LedControl * lc) {
 		}
 	}
 
-	if (lc != NULL && removed > 0) { this->draw(lc); }
+	if (removed > 0) { this->draw(lc); }
 
 	return removed;
 }
 
 void Pit::draw(LedControl * lc) {
+	if (lc == NULL) { return; }
 	lc->clearDisplay(0);
 	for (byte index=0; index<N; index++) {
 		lc->setRow(0, N-index-1, this->data[index]);
