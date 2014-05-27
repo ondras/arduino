@@ -3,57 +3,11 @@
 
 #define SHAPE_ROTATIONS	4
 #define SHAPE_SIZE		4
-#define SHAPE_COUNT		2
+#define SHAPE_COUNT		7
 
 typedef int Shape[SHAPE_SIZE];
 typedef Shape Shape4[SHAPE_ROTATIONS];
 
-Shape4 SHAPES[SHAPE_COUNT] = {
-	{
-		{
-			B0000,
-			B0110,
-			B0110,
-			B0000
-		}, {
-			B0000,
-			B0110,
-			B0110,
-			B0000
-		}, {
-			B0000,
-			B0110,
-			B0110,
-			B0000
-		}, {
-			B0000,
-			B0110,
-			B0110,
-			B0000
-		}
-	}, {
-		{
-			B0000,
-			B1111,
-			B0000,
-			B0000
-		}, {
-			B0010,
-			B0010,
-			B0010,
-			B0010
-		}, {
-			B0000,
-			B0000,
-			B1111,
-			B0000
-		}, {
-			B0100,
-			B0100,
-			B0100,
-			B0100
-		}
-	}
-};
+extern Shape4 SHAPES[SHAPE_COUNT];
 
 #endif

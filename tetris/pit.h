@@ -9,6 +9,7 @@ class Pit {
 	public:
 		Pit();
 		byte cleanup(LedControl * lc);
+		float score();
 		byte data[N];
 };
 

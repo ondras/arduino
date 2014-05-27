@@ -8,6 +8,10 @@
 class AI {
 	public:
 		byte act(Piece *, Pit *);
+		void newPiece(Piece *, Pit *);
+	private:
+		byte targetRotation;
+		byte targetPosition;
 };
 
 #endif

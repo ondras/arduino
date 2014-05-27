@@ -1,12 +1,14 @@
-#include <LedControl.h>
 #include "piece.h"
-#include "pit.h"
 #include "game.h"
 #include "shapes.h"
 
 void Piece::pick() {
 	this->shape = random(SHAPE_COUNT);
 	this->rotation = 0;
+	this->center();
+}
+
+void Piece::center() {
 	this->depth = N;
 	this->position = (N-SHAPE_SIZE)/2;
 }
@@ -38,6 +40,10 @@ void Piece::action(byte action) {
 	switch (action) {
 		case ACTION_DROP:
 			this->depth--;
+		break;
+
+		case ACTION_UNDO_DROP:
+			this->depth++;
 		break;
 
 		case ACTION_MOVE_L:

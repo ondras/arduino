@@ -1,12 +1,7 @@
-#include <Arduino.h>
-#include <LedControl.h>
 #include "pit.h"
 
 Pit::Pit() {
 	for (byte i=0;i<N;i++) { this->data[i] = 0; }
-	this->data[0] = B11100111;
-	this->data[1] = B11100111;
-	this->data[2] = B11100111;
 }
 
 byte Pit::cleanup(LedControl * lc) {
@@ -31,4 +26,8 @@ byte Pit::cleanup(LedControl * lc) {
 	}
 
 	return removed;
+}
+
+float Pit::score() {
+	return 0;
 }

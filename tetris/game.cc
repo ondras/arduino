@@ -12,7 +12,7 @@ void Game::start() {
 void Game::step() {
 	if (!this->playing) { return; }
 
-	byte action = ai.act(&this->piece, &this->pit);	
+	byte action = this->ai.act(&this->piece, &this->pit);
 
 	Piece old = this->piece;
 	this->piece.action(action);
@@ -26,8 +26,6 @@ void Game::step() {
 		for (byte i=0;i<removed;i++) {
 			this->score += 100 * (1 << i);
 		}
-		Serial.print("score: ");
-		Serial.println(this->score);
 
 		this->newPiece();
 		if (!this->piece.fits(&this->pit)) { this->gameOver(); }
@@ -37,6 +35,7 @@ void Game::step() {
 void Game::newPiece() {
 	this->piece.pick();
 	this->piece.draw(lc);
+	this->ai.newPiece(&this->piece, &this->pit);
 }
 
 void Game::gameOver() {
