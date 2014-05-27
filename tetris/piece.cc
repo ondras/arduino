@@ -106,6 +106,7 @@ void Piece::addTo(Pit * pit) {
 			/* to pit coords */
 			x = this->position + i;
 			y = this->depth - j;
+			if (y >= N) { continue; } /* out of the pit */
 
 			pit->data[y] |= (1 << (N-x-1));
 		}

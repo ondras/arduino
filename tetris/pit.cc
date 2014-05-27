@@ -18,7 +18,7 @@ byte Pit::cleanup(LedControl * lc) {
 		}
 	}
 
-	if (removed > 0) {
+	if (lc != NULL && removed > 0) {
 		lc->clearDisplay(0);
 		for (index=0; index<N; index++) {
 			lc->setRow(0, N-index-1, this->data[index]);

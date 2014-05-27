@@ -43,6 +43,7 @@ void AI::newPiece(Piece * piece, Pit * pit) {
 
 		/* try all positions */
 		for (int position = minPosition; position <= maxPosition; position++) {
+			tmpPiece.center();
 			tmpPiece.position = position;
 			tmpPit = *pit;
 
@@ -50,6 +51,7 @@ void AI::newPiece(Piece * piece, Pit * pit) {
 			tmpPiece.action(ACTION_UNDO_DROP); /* revert the last drop */
 
 			tmpPiece.addTo(&tmpPit);
+			tmpPit.cleanup(NULL);
 			score = tmpPit.score();
 
 			if (bestScore == -1 || score < bestScore) {

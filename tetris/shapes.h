@@ -3,7 +3,7 @@
 
 #define SHAPE_ROTATIONS	4
 #define SHAPE_SIZE		4
-#define SHAPE_COUNT		7
+#define SHAPE_COUNT		8
 
 typedef int Shape[SHAPE_SIZE];
 typedef Shape Shape4[SHAPE_ROTATIONS];
