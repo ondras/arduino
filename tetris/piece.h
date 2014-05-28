@@ -12,15 +12,15 @@ class Piece {
 		void action(byte);
 		bool fits(Pit *);
 		void addTo(Pit *);
-		void draw(LedControl *);
-		void clear(LedControl *);
+		void draw(Output *);
+		void clear(Output *);
 		byte shape;
 		byte rotation;
 		int position;
 
 	private:
 		int depth;
-		void draw(LedControl *, bool value);
+		void draw(Output *, bool value);
 };
 
 #endif

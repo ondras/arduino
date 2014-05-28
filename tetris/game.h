@@ -1,10 +1,10 @@
 #ifndef game_h
 #define game_h
 
-#include <LedControl.h>
 #include "ai.h"
 #include "pit.h"
 #include "piece.h"
+#include "output.h"
 
 #define ACTION_DROP			0
 #define ACTION_MOVE_L		1
@@ -15,7 +15,7 @@
 
 class Game {
 	public:
-		Game(LedControl *);
+		Game(Output *);
 		void start();
 		void step();
 		bool playing;
@@ -24,7 +24,7 @@ class Game {
 		AI ai;
 		Piece piece;
 		Pit pit;
-		LedControl * lc;
+		Output * output;
 		int score;
 		void newPiece();
 		void gameOver();

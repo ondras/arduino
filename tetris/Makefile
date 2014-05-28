@@ -1,3 +1,3 @@
-ARDUINO_LIBS = LedControl
+ARDUINO_LIBS = LedControl LiquidCrystal
 
 include ../Arduino.mk

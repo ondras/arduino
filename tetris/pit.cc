@@ -3,12 +3,12 @@
 Pit::Pit() {
 }
 
-void Pit::clear(LedControl * lc) {
+void Pit::clear(Output * output) {
 	for (byte i=0;i<N;i++) { this->data[i] = 0; }
-	this->draw(lc);
+	this->draw(output);
 }
 
-byte Pit::cleanup(LedControl * lc) {
+byte Pit::cleanup(Output * output) {
 	byte removed = 0, index = 0, tmp;
 
 	while (index < N) {
@@ -22,16 +22,17 @@ byte Pit::cleanup(LedControl * lc) {
 		}
 	}
 
-	if (removed > 0) { this->draw(lc); }
+	if (removed > 0 && output != NULL) { this->draw(output); }
 
 	return removed;
 }
 
-void Pit::draw(LedControl * lc) {
-	if (lc == NULL) { return; }
-	lc->clearDisplay(0);
-	for (byte index=0; index<N; index++) {
-		lc->setRow(0, N-index-1, this->data[index]);
+void Pit::draw(Output * output) {
+	output->clearPixels();
+	for (byte depth=0; depth<N; depth++) {
+		for (byte x=0; x<N; x++) {
+			output->setPixel(x, N-depth-1, this->data[depth] & (1 << (N-x-1)));
+		}
 	}
 }
 

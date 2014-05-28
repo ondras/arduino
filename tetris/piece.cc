@@ -66,7 +66,7 @@ void Piece::action(byte action) {
 	}
 }
 
-void Piece::draw(LedControl * lc, bool value) {
+void Piece::draw(Output * output, bool value) {
 	int x, y, i, j;
 	bool bit;
 
@@ -80,17 +80,17 @@ void Piece::draw(LedControl * lc, bool value) {
 			x = this->position + i;
 			y = this->depth - j;
 
-			lc->setLed(0, N-y-1, x, value);
+			output->setPixel(x, N-y-1, value);
 		}
 	}
 }
 
-void Piece::draw(LedControl * lc) {
-	this->draw(lc, true);
+void Piece::draw(Output * output) {
+	this->draw(output, true);
 }
 
-void Piece::clear(LedControl * lc) {
-	this->draw(lc, false);
+void Piece::clear(Output * output) {
+	this->draw(output, false);
 }
 
 void Piece::addTo(Pit * pit) {
