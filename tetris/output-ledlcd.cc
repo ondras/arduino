@@ -40,7 +40,7 @@ void OutputLEDLCD::draw() {
 
 	this->lcd->clear();
 
-	char buf[17];
+	char buf[20];
 	sprintf(buf, "Now:  %3d (#%d)", this->score, this->game);
 	this->lcd->setCursor(0, 0);
 	this->lcd->print(buf);
