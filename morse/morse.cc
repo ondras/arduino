@@ -1,7 +1,7 @@
 #include "morse.h"
 #include <Arduino.h>
 
-#define DELAY_STRING 2000
+#define DELAY_STRING 4000
 
 const char * LETTERS[] = {
 	".-",     // A

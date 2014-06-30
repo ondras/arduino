@@ -10,7 +10,6 @@
 OutputLED::OutputLED(LedControl * lc, float speed) : lc(lc), speed(speed) {
 	if (this->lc) { 
 		this->lc->shutdown(0, false);
-		this->lc->setIntensity(0, 0);
 	}
 }
 
