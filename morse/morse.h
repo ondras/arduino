@@ -43,8 +43,9 @@ const char * NUMBERS[] = {
 const char * CH = "----";
 
 const char * _morseLetter(const char ch, const char next) {
-	/* FIXME next/ch */
-	if (ch >= 'a' && ch <= 'z') {
+	if ((ch == 'c' || ch == 'C') && (next == 'h' || next == 'H')) {
+		return CH;
+	} else if (ch >= 'a' && ch <= 'z') {
 		return LETTERS[ch - 'a'];
 	} else if (ch >= 'A' && ch <= 'Z') {
 		return LETTERS[ch - 'A'];
@@ -72,7 +73,10 @@ String morse(String in) {
 			inWord = true;
 			next = (i+1 < len ? in[i+1] : 0);
 			part = _morseLetter(ch, next);
-			if (part) { out += part + "/"; }
+			if (part) { 
+				out += part + "/"; 
+				if (part == CH) { i++; }
+			}
 		}
 	}
 

@@ -17,7 +17,7 @@ void led_set(bool value) {
 void setup() {
 	lc.setIntensity(0, 0);
 	lc.shutdown(0, false);
-	code = morse("SOS JAK CYP");
+	code = morse("juch");
 }
 
 void loop() {
