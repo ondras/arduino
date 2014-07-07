@@ -1,43 +1,47 @@
-int trigPin = 7;
-int echoPin = 8;
-int buzzPin = 10;
-int val;
+#define TRIG 7
+#define ECHO 8
+#define BUZZ 3
 
-void setup()
-{
- Serial.begin (9600);
-  pinMode(buzzPin, OUTPUT);  //set speaker pin to output
- pinMode(trigPin, OUTPUT);
- pinMode(echoPin, INPUT);
+#define MIN_DIST 3.0
+#define MIN_FREQ 131.0
+#define MAX_DIST 50.0
+#define MAX_FREQ 1048.0
+
+#define GAP 1.059463094
+
+void setup() {
+	Serial.begin(9600);
+	pinMode(BUZZ, OUTPUT);
+	pinMode(TRIG, OUTPUT);
+	pinMode(ECHO, INPUT);
 }
 
-int getPing()
-{
-  //send a 10us pulse to wake up the sonar
- digitalWrite(trigPin, LOW); 
- delayMicroseconds(2); 
+int getPing() {
+	digitalWrite(TRIG, LOW); 
+	delayMicroseconds(2); 
 
- digitalWrite(trigPin, HIGH);
- delayMicroseconds(10); 
- 
- digitalWrite(trigPin, LOW);
- return pulseIn(echoPin, HIGH);
+	digitalWrite(TRIG, HIGH);
+	delayMicroseconds(10); 
+
+	digitalWrite(TRIG, LOW);
+	return pulseIn(ECHO, HIGH);
 }
 
-void loop()
-{
-    val = 1000 - getPing() / 5;  //you can tune the pitch by dividing by a different number
-  	//Serial.println(val);
+void loop() {
+	float distance = getPing()/58.2;
+	if (distance < MIN_DIST || distance > MAX_DIST) {
+		noTone(BUZZ);
+		return;
+	}
+	
+	float freq = MIN_FREQ + (distance - MIN_DIST) * (MAX_FREQ-MIN_FREQ)/(MAX_DIST-MIN_DIST);
 
-    //generate the pulse
-    tone(buzzPin, val);
-    delay(5);
+	/* autotune */
+//	float lf = log(freq) / log(GAP); 
+//	float rlf = round(lf);
+//	freq = pow(GAP, rlf);
 
-/*
-    digitalWrite(buzzPin, HIGH);
-    delayMicroseconds(val);
-    digitalWrite(buzzPin, LOW);
-    delayMicroseconds(val);
-    */
-
+	tone(BUZZ, freq);
+//	Serial.println(distance);
+	delay(20);
 }
