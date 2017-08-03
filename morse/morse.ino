@@ -6,7 +6,8 @@
 #define SPEED 1
 #define DELAY 200*SPEED
 #define BLINK(length) led_set(true); delay(length*DELAY); led_set(false); delay(DELAY)
-#define LIMIT 150
+#define LIMIT 50
+#define BUZZ 2
 
 /*
  * Pin 12 is connected to the DATA IN-pin of the first MAX7221
@@ -19,14 +20,20 @@ String code;
 int index = 0;
 
 void led_set(bool value) {
+	if (value) {
+		tone(BUZZ, 440);
+	} else {
+		noTone(BUZZ);
+	}
 	for (byte i=0;i<N;i++) {
 		lc.setRow(0, i, value ? (1 << N)-1 : 0);
 	}
 }
 void setup() {
+	pinMode(BUZZ, OUTPUT);
 	lc.setIntensity(0, 0);
 	lc.shutdown(0, false);
-	code = morse("tajny kod");
+	code = morse("vezmi listek pod kamenem");
 }
 
 void loop() {
@@ -45,3 +52,4 @@ void loop() {
 	index++;
 	if (index >= code.length()) { index = 0; }
 }
+
