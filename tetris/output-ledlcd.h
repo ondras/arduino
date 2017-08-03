@@ -16,6 +16,6 @@ class OutputLEDLCD : public Output {
 		LiquidCrystal * lcd;
 		int score;
 		int bestScore;
-		int game;
-		int bestGame;
+		long game;
+		long bestGame;
 };
