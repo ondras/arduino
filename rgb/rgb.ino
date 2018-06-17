@@ -1,7 +1,7 @@
 #define N 3
 #define MAX 256
 
-byte pins[N] = {11, 10, 9};
+byte pins[N] = {6, 5, 3};
 byte rgb[N] = {0, 0, 0};
 
 byte index = 0;

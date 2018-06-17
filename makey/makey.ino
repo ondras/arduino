@@ -1,6 +1,6 @@
 #include "pitches.h"
-#define BUZZ 12
-#define DELAY_SMALL 50
+#define BUZZ 13
+#define DELAY_SMALL 10
 #define DELAY_MELODY 200
 
 class Pin {
@@ -55,8 +55,8 @@ class Melody {
 
 Pin pins[] = {
 	Pin(A0, 80),
-	Pin(A1, 80),
-	Pin(A2, 80)
+	Pin(A1, 100),
+	Pin(A2, 100)
 };
 
 int def[] = {NOTE_A4, -1, NOTE_A3, -1, 0};
@@ -66,10 +66,42 @@ void setup() {
 	pinMode(BUZZ, OUTPUT);
 }
 
+int current = 0;
+
+void play(int freq) {
+	if (freq == current) { return; }
+	current = freq;
+	if (freq) {
+		tone(BUZZ, freq);
+	} else {
+		noTone(BUZZ);
+	}
+}
+
 void loop() {
 	int count = sizeof(pins) / sizeof(Pin);
 	for (int i=0;i<count;i++) { pins[i].update(); }
-
+	
+	if (pins[0].isOn()) {
+		song.reset();
+		tone(BUZZ, 4096 - 5*pins[0].getValue());
+	}  else {
+		noTone(BUZZ);
+	} 
+	delay(DELAY_SMALL);
+	
+	
+	/*
+	if (pins[0].isOn()) {
+		play(NOTE_C5);
+	} else if (pins[1].isOn()) {
+		play(NOTE_E5);
+	} else if (pins[2].isOn()) {
+		play(NOTE_G5);
+	} else {
+		play(0);
+	}*/
+/*
 	if (pins[0].isOn()) {
 		song.reset();
 		tone(BUZZ, NOTE_A4);
@@ -84,4 +116,5 @@ void loop() {
 		song.reset();
 		noTone(BUZZ);
 	}
+	*/
 }
