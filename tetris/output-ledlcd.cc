@@ -40,12 +40,13 @@ void OutputLEDLCD::draw() {
 
 	this->lcd->clear();
 
-	char buf[20];
-	sprintf(buf, "Now:  %3d (#%d)", this->score, this->game);
+	int len = 30;
+	char buf[len];
+	snprintf(buf, len, "Cur: %3d/#%ld", this->score, this->game);
 	this->lcd->setCursor(0, 0);
 	this->lcd->print(buf);
 
-	sprintf(buf, "Best: %3d (#%d)", this->bestScore, this->bestGame);
+	snprintf(buf, len, "Top: %3d/#%ld", this->bestScore, this->bestGame);
 	this->lcd->setCursor(0, 1);
 	this->lcd->print(buf);
 }
