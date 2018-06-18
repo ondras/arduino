@@ -1,9 +1,9 @@
 #include "game.h"
-// #include "output-rgbmatrix.h"
 #include "output-terminal.h"
+#include "output-rgbmatrix.h"
 
-// OutputRGBMatrix output;
-OutputTerminal output;
+OutputRGBMatrix output;
+//OutputTerminal output;
 Game game(&output);
 
 void setup() {

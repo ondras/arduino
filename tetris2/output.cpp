@@ -27,6 +27,8 @@ void Output::drawPiece(Piece * piece) {
 			// to pit coords
 			x = piece->position + i;
 			y = piece->depth - j;
+			if (x < 0 || x >= WIDTH) { continue; }
+			if (y < 0 || y >= DEPTH) { continue; }
 
 			this->setPixel(x, DEPTH-y-1, piece->color);
 		}

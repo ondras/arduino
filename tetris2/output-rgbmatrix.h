@@ -3,6 +3,7 @@
 
 class OutputRGBMatrix : public Output {
 	public:
+		OutputRGBMatrix();
 		void setScore(int);
 		void newGame();
 		void draw(Pit *, Piece *);
