@@ -1,7 +1,9 @@
 #include "game.h"
-#include "output-rgbmatrix.h"
+// #include "output-rgbmatrix.h"
+#include "output-terminal.h"
 
-OutputRGBMatrix output;
+// OutputRGBMatrix output;
+OutputTerminal output;
 Game game(&output);
 
 void setup() {
@@ -15,9 +17,9 @@ void loop() {
 	game.step();
 
 	if (game.playing) {
-//		delay(100);
+		delay(100);
 	} else {
-//		delay(2000);
-//		game.start();
+		delay(2000);
+		game.start();
 	}
 }

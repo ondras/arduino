@@ -4,6 +4,7 @@
 #define SHAPE_ROTATIONS	4
 #define SHAPE_SIZE		4
 #define SHAPE_COUNT		8
+#define COLOR_COUNT		6
 
 typedef int Shape[SHAPE_SIZE];
 typedef Shape Shape4[SHAPE_ROTATIONS];

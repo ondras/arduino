@@ -2,11 +2,10 @@
 #include "game.h"
 #include "shapes.h"
 
-Piece::Piece() {
-	this->color = 1;
-}
+#include <stdio.h>
 
-void Piece::pick() {
+Piece::Piece() {
+	this->color = 1 + random(COLOR_COUNT);
 	this->shape = random(SHAPE_COUNT);
 	this->rotation = 0;
 	this->center();

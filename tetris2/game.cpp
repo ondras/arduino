@@ -1,4 +1,5 @@
 #include "game.h"
+#include "piece.h"
 
 Game::Game(Output * output) : playing(false), output(output), score(0) {
 }
@@ -39,7 +40,7 @@ void Game::step() {
 }
 
 void Game::newPiece() {
-	this->piece.pick();
+	this->piece = Piece();
 	this->ai.newPiece(&this->piece, &this->pit);
 }
 

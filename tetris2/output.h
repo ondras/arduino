@@ -9,11 +9,11 @@ class Output {
 	public:
 		virtual void setScore(int);
 		virtual void newGame();
-		void draw(Pit *, Piece *);
+		virtual void draw(Pit *, Piece *);
 
 	private:
-		void drawPit(Pit *);
-		void drawPiece(Piece *);
+		virtual void drawPit(Pit *);
+		virtual void drawPiece(Piece *);
 		virtual void setPixel(byte, byte, byte);
 };
 
