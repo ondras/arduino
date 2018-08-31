@@ -1,26 +1,23 @@
 #include <Adafruit_NeoPixel.h>
 
-// set to pin connected to data input of WS8212 (NeoPixel) strip
 #define PIN         0
-#define RNDPIN      2
-
-// number of LEDs (NeoPixels) in your strip
-// (please note that you need 3 bytes of RAM available for each pixel)
 #define NUMPIXELS   7
+
+#define MAX_R 1
+#define MAX_G 0.5
+#define MAX_B 0
+
+#define COLOR(intensity) intensity*MAX_R, intensity*MAX_G, intensity*MAX_B
 
 // max LED brightness (1 to 255) – start with low values!
 // (please note that high brightness requires a LOT of power)
 #define BRIGHTNESS  250
 
-
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
-  // initialize pseudo-random number generator with some random value
-  randomSeed(analogRead(RNDPIN));
   pinMode(1, OUTPUT);
 
-  // initialize LED strip
   strip.begin();
   strip.show();
 }
@@ -28,23 +25,20 @@ void setup() {
 double current = 0;
 
 void loop() {
-  // use real time to recalculate position of each color spot
-  double ms = (double) millis();
-  float speed = (1+sin(ms/1000))/2;
-  speed = max(speed, 0.2);
+  double ms = (double) millis(); // double 0..many
+  float bright = (1+sin(ms/1000))/2; // float 0..1
+  bright = (0.1+bright*0.9) * 255; // 25..255
 
-  float center = BRIGHTNESS * speed;
-  strip.setPixelColor(0, center, center, center);
+  strip.setPixelColor(0, COLOR(bright));
 
-  current += speed*0.02;
+  current += 0.001;
   int currentIndex = long(current) % (NUMPIXELS-1);
 
   for (int i=0; i<NUMPIXELS-1; i++) {
-    int value = (i == currentIndex ? BRIGHTNESS/2 : 0);
-    strip.setPixelColor(i+1, value, value, value);
+    float value = (i == currentIndex ? 1 : 0.25);
+    strip.setPixelColor(i+1, COLOR(bright * value));
   }
 
-  // send data to LED strip
   strip.show();
 
   int s = ms/1000;
