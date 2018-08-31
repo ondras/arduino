@@ -21,7 +21,7 @@ CRGB leds[NUM_LEDS];
 
 OutputRGBMatrix::OutputRGBMatrix() {
 	FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
-	FastLED.setBrightness(32);
+	FastLED.setBrightness(50);
 }
 
 void OutputRGBMatrix::newGame() {}

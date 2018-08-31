@@ -17,9 +17,9 @@ void loop() {
 	game.step();
 
 	if (game.playing) {
-		delay(100);
+		delay(150);
 	} else {
-		delay(2000);
+		delay(1000);
 		game.start();
 	}
 }
