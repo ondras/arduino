@@ -26,13 +26,12 @@ double current = 0;
 
 void loop() {
   double ms = (double) millis(); // double 0..many
-  float bright = (1+sin(ms/1000))/2; // float 0..1
-  bright = (0.1+bright*0.9) * 255; // 25..255
+  float bright = (1+sin(ms/1500))/2; // float 0..1
+  bright = (0.1+bright*0.9) * 250; // 25..250
 
   strip.setPixelColor(0, COLOR(bright));
 
-  current += 0.001;
-  int currentIndex = long(current) % (NUMPIXELS-1);
+  int currentIndex = long(ms/1000) % (NUMPIXELS-1);
 
   for (int i=0; i<NUMPIXELS-1; i++) {
     float value = (i == currentIndex ? 1 : 0.25);
