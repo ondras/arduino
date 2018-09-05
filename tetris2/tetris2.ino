@@ -2,8 +2,12 @@
 #include "output-terminal.h"
 #include "output-rgbmatrix.h"
 
+#ifdef TERMINAL
+OutputTerminal output;
+#else
 OutputRGBMatrix output;
-//OutputTerminal output;
+#endif
+
 Game game(&output);
 
 void setup() {
