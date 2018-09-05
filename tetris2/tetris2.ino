@@ -6,6 +6,7 @@
 
 #ifdef BENCH
 #include <stdio.h>
+#define MAX_GAMES 100
 Output output;
 #elif TERM
 OutputTerminal output;
@@ -21,7 +22,9 @@ Game game(&output, &weights);
 
 void setup() {
 //	randomSeed(analogRead(A0) * analogRead(A1) * analogRead(A2));
-	srandom(games+10);
+#ifdef BENCH
+	srandom(games);
+#endif
 	game.start();
 }
 
@@ -29,19 +32,19 @@ void loop() {
 	game.step();
 
 	if (game.playing) {
-		#ifndef FAST
+		#ifndef BENCH
 		delay(150);
 		#endif
 	} else {
 		games++;
 		total_score += game.score;
-		#ifndef FAST
+		#ifndef BENCH
 		delay(1000);
 		#endif
 
 		#ifdef BENCH
-		if (games > 100) {
-			printf("%i", total_score);
+		if (games > MAX_GAMES) {
+			printf("%i\n", total_score);
 			exit(0);
 		} else {
 			setup();
