@@ -1,8 +1,7 @@
 #include "game.h"
 #include "piece.h"
 
-Game::Game(Output * output) : playing(false), output(output), score(0) {
-}
+Game::Game(Output* output, Weights* weights) : playing(false), output(output), pit(Pit(weights)), score(0) {}
 
 void Game::start() {
 	this->score = 0;

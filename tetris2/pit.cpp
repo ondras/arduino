@@ -1,6 +1,8 @@
 #include "pit.h"
 #include "stdio.h"
 
+Pit::Pit(Weights * weights): weights(weights) {}
+
 void Pit::clear() {
 	for (int x=0;x<WIDTH;x++) { 
 		for (int y=0;y<DEPTH;y++) { 
@@ -37,12 +39,12 @@ byte Pit::cleanup() {
 }
 
 /* compute six values:
-  - cells = total occupied cells
-  - weighted_cells = weighted sum of cells
   - holes = number of holes (cells with empty cell below them)
   - max_depth = maximum column depth
-  - slope = sum of absolute column differences
+  - cells = total occupied cells
   - max_slope = maximum of absolute slopes
+  - slope = sum of absolute column differences
+  - weighted_cells = weighted sum of cells
 */
 float Pit::score() {
 	int max_depth = 0, cells = 0, holes = 0, slope = 0, max_slope = 0, weighted_cells = 0;
@@ -78,6 +80,7 @@ float Pit::score() {
 	}
 
 	// experimental weights
-	return 20*holes + 2*max_depth + 1*cells + 1*max_slope + 1*slope + 1*weighted_cells;
+	//return 20*holes + 2*max_depth + 1*cells + 1*max_slope + 1*slope + 1*weighted_cells;
+	Weights* w = weights;
+	return w->holes*holes + w->max_depth*max_depth + w->cells*cells + w->max_slope*max_slope + w->slope*slope + w->weighted_cells*weighted_cells;
 }
-

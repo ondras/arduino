@@ -23,7 +23,7 @@ void AI::newPiece(Piece * piece, Pit * pit) {
 
 	float bestScore = -1, score;
 	int minPosition, maxPosition;
-	Pit tmpPit;
+	Pit tmpPit(pit->weights);
 	Piece tmpPiece = *piece;
 
 	for (byte rotation = 0; rotation < SHAPE_ROTATIONS; rotation++) {

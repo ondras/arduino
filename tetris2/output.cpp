@@ -34,3 +34,7 @@ void Output::drawPiece(Piece * piece) {
 		}
 	}
 }
+
+void Output::setScore(int score) {}
+void Output::newGame() {}
+void Output::setPixel(byte x, byte y, byte color) {}

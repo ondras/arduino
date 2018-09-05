@@ -15,17 +15,17 @@
 
 class Game {
 	public:
-		Game(Output *);
+		Game(Output*, Weights*);
 		void start();
 		void step();
 		bool playing;
+		int score;
 
 	private:
 		AI ai;
 		Piece piece;
 		Pit pit;
-		Output * output;
-		int score;
+		Output* output;
 		void newPiece();
 		void gameOver();
 };
