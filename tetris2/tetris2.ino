@@ -17,7 +17,8 @@ OutputRGBMatrix output;
 int total_score = 0;
 int games = 0;
 
-Weights weights { .holes = 20, .max_depth = 2, .cells = 1, .max_slope = 1, .slope = 1, .weighted_cells = 1 };
+//Weights weights { .holes = 20, .max_depth = 2, .cells = 1, .max_slope = 1, .slope = 1, .weighted_cells = 1 };
+Weights weights { .holes = 10, .max_depth = 0, .cells = 0, .max_slope = 2, .slope = 1.5, .weighted_cells = 0.5 };
 Game game(&output, &weights);
 
 void setup() {
@@ -32,25 +33,48 @@ void loop() {
 	game.step();
 
 	if (game.playing) {
-		#ifndef BENCH
+#ifndef BENCH
 		delay(150);
-		#endif
+#endif
 	} else {
 		games++;
 		total_score += game.score;
-		#ifndef BENCH
+#ifndef BENCH
 		delay(1000);
-		#endif
+#endif
 
-		#ifdef BENCH
+#ifdef BENCH
 		if (games > MAX_GAMES) {
 			printf("%i\n", total_score);
 			exit(0);
 		} else {
 			setup();
 		}
-		#else
+#else
 		setup();
-		#endif
+#endif
 	}
 }
+
+#if defined(BENCH) || defined(TERM)
+
+int main(int argc, char** argv) {
+#ifdef BENCH
+	if (argc < 7) {
+		printf("USAGE: %s holes max_depth cells max_slope slope weighted_cells\n", argv[0]);
+		exit(1);
+	}
+
+	weights.holes = atof(argv[1]);
+	weights.max_depth = atof(argv[2]);
+	weights.cells = atof(argv[3]);
+	weights.max_slope = atof(argv[4]);
+	weights.slope = atof(argv[5]);
+	weights.weighted_cells = atof(argv[6]);
+#endif
+
+	setup();
+	while (true) { loop(); }
+}
+
+#endif
