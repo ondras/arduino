@@ -5,23 +5,23 @@
 #include "output.h"
 
 #ifdef BENCH
-#include <stdio.h>
-#include <limits.h>
-#define MAX_GAMES 100
-Output output;
+	#include <stdio.h>
+	#include <limits.h>
+	#define MAX_GAMES 100
+	Output output;
+	int total_score = 0;
+	int min_score = INT_MAX;
+	int max_score = 0;
+	int games = 0;
 #elif TERM
-OutputTerminal output;
+	OutputTerminal output;
 #else
-OutputRGBMatrix output;
+	OutputRGBMatrix output;
 #endif
 
-int total_score = 0;
-int min_score = INT_MAX;
-int max_score = 0;
-int games = 0;
 
 //Weights weights { .holes = 20, .max_depth = 2, .cells = 1, .max_slope = 1, .slope = 1, .weighted_cells = 1 };
-Weights weights { .holes = 10, .max_depth = 0, .cells = 0, .max_slope = 2, .slope = 1.5, .weighted_cells = 0.5 };
+Weights weights { .holes = 11.8, .max_depth = 0.1, .cells = -1.1, .max_slope = 0.6, .slope = 2.2, .weighted_cells = 0.6 };
 Game game(&output, &weights);
 
 void setup() {
@@ -37,21 +37,22 @@ void loop() {
 
 	if (game.playing) {
 #ifndef BENCH
-		delay(150);
+		delay(50);
 #endif
 	} else {
+#ifdef BENCH
 		games++;
 		total_score += game.score;
 		min_score = min(min_score, game.score);
 		max_score = max(max_score, game.score);
-#ifndef BENCH
+#else
 		delay(1000);
 #endif
 
 #ifdef BENCH
 		if (games > MAX_GAMES) {
-//			printf("total: %i, min: %i, max: %i\n", total_score, min_score, max_score);
-			printf("%i\n", total_score);
+			printf("total: %i, min: %i, max: %i\n", total_score, min_score, max_score);
+//			printf("%i\n", total_score);
 			exit(0);
 		} else {
 			setup();
