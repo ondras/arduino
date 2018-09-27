@@ -37,7 +37,7 @@ void loop() {
 
 	if (game.playing) {
 #ifndef BENCH
-		delay(50);
+		delay(100);
 #endif
 	} else {
 #ifdef BENCH

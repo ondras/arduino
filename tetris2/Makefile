@@ -1,4 +1,4 @@
-SOURCES := $(wildcard *.cpp)
+SOURCES := $(wildcard *.cpp) $(wildcard *.cc)
 SOURCES := $(filter-out output-rgbmatrix.cpp,$(SOURCES))
 
 BIN := tetris2
