@@ -4,15 +4,58 @@
 		<meta name="viewport" content="width=device-width" />
 		<meta charset="utf-8" />
 		<title>Buckle control panel</title>
+		<style>
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+#features {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	grid-gap: 4px;
+	margin: 8px;
+}
+
+#features button {
+	height: 40px;
+	padding: 0;
+}
+
+#feature {
+	margin: 8px;
+}
+
+[type=color] {
+	border: none;
+	padding: 0;
+	width: 100%;
+	height: 40px;
+}
+
+[data-feature=paintbrush] {
+	display: grid;
+	grid-gap: 4px;
+	grid-template-columns: repeat(8, 1fr);
+}
+		</style>
 	</head>
 	<body>
+		<section id="features"></section>
+		<section id="feature"></section>
 <script>
+const FEATURES = document.querySelector("#features");
+const FEATURE = document.querySelector("#feature");
+
 function showError(e) {
 	alert(e.message);
 }
 
 function setFeature(feature) {
 	fetch(`/feature?feature=${encodeURIComponent(feature)}`, {method:"POST"}).catch(showError);
+	FEATURE.innerHTML = "";
+	FEATURE.dataset.feature = feature;
+
+	let controller = window[feature];
+	controller && controller(FEATURE);
 }
 
 function buildFeature(feature, label) {
@@ -22,8 +65,44 @@ function buildFeature(feature, label) {
 	return button;
 }
 
-document.body.appendChild(buildFeature("noop", "No-op"));
-document.body.appendChild(buildFeature("blinker", "Blinker"));
+function paintbrush(parent) {
+	function saveOne(input, offset) {
+		let num = parseInt(input.value.slice(1), 16);
+		let fd = new FormData();
+		fd.set("offset", offset);
+		fd.set("r", num >> 16);
+		fd.set("g", (num >> 8) & 0xff);
+		fd.set("b", num & 0xff);
+		fetch("/config", {method:"POST", body:fd});
+	}
+
+	function buildOne(r, g, b, offset) {
+		let input = document.createElement("input");
+		input.type = "color";
+		let parts = [r, g, b].map(x => x.toString(16).padStart(2, "0"));
+		input.value = `#${parts.join("")}`;
+		parent.appendChild(input);
+		input.addEventListener("change", e => saveOne(input, offset));
+	}
+
+	function buildAll(data) {
+		let view = new Uint8Array(data);
+		let i=0;
+		while (i < view.length) {
+			let r = view[i+0];
+			let g = view[i+1];
+			let b = view[i+2];
+			buildOne(r, g, b, i);
+			i+=3;
+		}
+	}
+	fetch("/paintbrush.dat").then(response => response.arrayBuffer()).then(buildAll);
+}
+
+FEATURES.appendChild(buildFeature("noop", "No-op"));
+FEATURES.appendChild(buildFeature("blinker", "Blinker"));
+FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
+setFeature("paintbrush");
 		</script>
 	</body>
 </html>
