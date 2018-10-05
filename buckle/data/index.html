@@ -25,10 +25,9 @@ body { margin: 0; }
 }
 
 [type=color] {
-	border: none;
-	padding: 0;
 	width: 100%;
-	height: 40px;
+	height: 50px;
+	padding: 0;
 }
 
 [data-feature=paintbrush] {
@@ -36,6 +35,12 @@ body { margin: 0; }
 	grid-gap: 4px;
 	grid-template-columns: repeat(8, 1fr);
 }
+
+[data-feature=paintbrush] span {
+	width: 100%;
+	height: 40px;
+}
+
 		</style>
 	</head>
 	<body>
@@ -66,8 +71,11 @@ function buildFeature(feature, label) {
 }
 
 function paintbrush(parent) {
-	function saveOne(input, offset) {
-		let num = parseInt(input.value.slice(1), 16);
+	let color = document.createElement("input");
+	color.type = "color";
+
+	function saveOne(offset) {
+		let num = parseInt(color.value.slice(1), 16);
 		let fd = new FormData();
 		fd.set("offset", offset);
 		fd.set("r", num >> 16);
@@ -77,12 +85,13 @@ function paintbrush(parent) {
 	}
 
 	function buildOne(r, g, b, offset) {
-		let input = document.createElement("input");
-		input.type = "color";
-		let parts = [r, g, b].map(x => x.toString(16).padStart(2, "0"));
-		input.value = `#${parts.join("")}`;
-		parent.appendChild(input);
-		input.addEventListener("change", e => saveOne(input, offset));
+		let node = document.createElement("span");
+		parent.appendChild(node);
+		node.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+		node.addEventListener("click", e => {
+			node.style.backgroundColor = color.value;
+			saveOne(offset);
+		});
 	}
 
 	function buildAll(data) {
@@ -95,6 +104,7 @@ function paintbrush(parent) {
 			buildOne(r, g, b, i);
 			i+=3;
 		}
+		parent.appendChild(color);
 	}
 	fetch("/paintbrush.dat").then(response => response.arrayBuffer()).then(buildAll);
 }

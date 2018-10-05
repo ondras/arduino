@@ -1,18 +1,24 @@
 #define DEBUG_MSG Serial.println
 #define FEATURE_COUNT 3
+#define FASTLED_ALLOW_INTERRUPTS 0
+#define NUM_LEDS 64
+#define LED_PIN 0 // corresponds to Wemos pin D3
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <FS.h>
+#include <FastLED.h>
 #include "feature.h"
 #include "paintbrush.h"
 
+CRGB leds[NUM_LEDS];
 ESP8266WebServer server(80);
 Feature * current_feature;
+String current_feature_name;
 
 Blinker blinker;
 Feature noop;
-Paintbrush paintbrush;
+Paintbrush paintbrush(leds);
 
 Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush };
 String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush" };
@@ -24,13 +30,19 @@ void setup() {
   result = SPIFFS.begin();
   DEBUG_MSG(String("SPIFFS ") + result);
 
+  FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
+  int brightness = 80;
+  FastLED.setBrightness(brightness);
+  DEBUG_MSG(String("Brightness ") + brightness);
+
   server.serveStatic("/", SPIFFS, "/index.html");
   server.serveStatic(PAINTBRUSH_FILE, SPIFFS, PAINTBRUSH_FILE);
-  server.on("/feature", HTTP_POST, onFeature);
+  server.on("/feature", HTTP_GET, onGetFeature);
+  server.on("/feature", HTTP_POST, onPostFeature);
   server.on("/config", HTTP_POST, onConfig);
   server.begin();
 
-//  setFeature(String("blinker"));
+  setFeature(String("noop"));
 }
 
 void setFeature(const String& feature) {
@@ -40,12 +52,17 @@ void setFeature(const String& feature) {
   }
   if (index == -1) { index = 0; }
 
+  current_feature_name = NAMES[index];
   current_feature = FEATURES[index];
   current_feature->setup();
   server.send(200, "text/plain", "Oll Korrect");
 }
 
-void onFeature() {
+void onGetFeature() {
+  server.send(200, "text/plain", current_feature_name);
+}
+
+void onPostFeature() {
   String feature = server.arg("feature");
   DEBUG_MSG("onFeature " + feature);
   setFeature(feature);
