@@ -9,6 +9,10 @@ function setFeature(feature, options = {}) {
 	FEATURE.innerHTML = "";
 	FEATURE.dataset.feature = feature;
 
+	Array.from(FEATURES.querySelectorAll("button")).forEach(button => {
+		button.classList.toggle("active", button.dataset.feature == feature);
+	});
+
 	if (!options.readOnly) { fetch(`/feature?feature=${encodeURIComponent(feature)}`, {method:"POST"}).catch(showError); }
 
 	let controller = window[feature];
@@ -17,6 +21,7 @@ function setFeature(feature, options = {}) {
 
 function buildFeature(feature, label) {
 	let button = document.createElement("button");
+	button.dataset.feature = feature;
 	button.textContent = label;
 	button.addEventListener("click", e => setFeature(feature));
 	return button;

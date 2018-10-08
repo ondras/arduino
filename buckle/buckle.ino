@@ -18,7 +18,7 @@ String current_feature_name;
 
 Blinker blinker;
 Feature noop;
-Paintbrush paintbrush(leds);
+Paintbrush paintbrush;
 
 Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush };
 String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush" };
@@ -34,6 +34,8 @@ void setup() {
   int brightness = 80;
   FastLED.setBrightness(brightness);
   DEBUG_MSG(String("Brightness ") + brightness);
+
+  paintbrush.begin(leds);
 
   server.serveStatic("/", SPIFFS, "/index.html");
   server.serveStatic("/index.css", SPIFFS, "/index.css");

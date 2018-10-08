@@ -9,15 +9,17 @@ unsigned char EMPTY[] = { 0, 0, 0 };
 
 class Paintbrush : public Feature {
   public:
-    Paintbrush(CRGB* leds) : leds(leds) {
+    void begin(CRGB* leds) {
+      this->leds = leds;
       if (!SPIFFS.exists(PAINTBRUSH_FILE)) {
         File file = SPIFFS.open(PAINTBRUSH_FILE, "w");
         for (int i=0; i<N*N; i++) {
-          file.write(EMPTY, sizeof(EMPTY));
+          size_t written = file.write(EMPTY, sizeof(EMPTY));
         }
         file.close();
       }
     }
+
     void setup() {
       File file = SPIFFS.open(PAINTBRUSH_FILE, "r");
       byte rgb[3];
