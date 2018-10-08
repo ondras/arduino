@@ -1,16 +1,17 @@
 #define PAINTBRUSH_FILE "/paintbrush.dat"
-#define N 8
 
 #include "feature.h"
+#include "leds.h"
 #include <FastLED.h>
 #include <FS.h>
 
 unsigned char EMPTY[] = { 0, 0, 0 };
 
-class Paintbrush : public Feature {
+class Paintbrush : public Leds {
   public:
     void begin(CRGB* leds) {
-      this->leds = leds;
+      Leds::begin(leds);
+
       if (!SPIFFS.exists(PAINTBRUSH_FILE)) {
         File file = SPIFFS.open(PAINTBRUSH_FILE, "w");
         for (int i=0; i<N*N; i++) {
@@ -25,7 +26,7 @@ class Paintbrush : public Feature {
       byte rgb[3];
       for (int i=0; i<N*N; i++) {
         file.read(rgb, sizeof(rgb));
-        setLed(i, rgb[0], rgb[1], rgb[2]);
+        leds[i].setRGB(rgb[0], rgb[1], rgb[2]);
       }
       FastLED.show();
     }
@@ -42,20 +43,8 @@ class Paintbrush : public Feature {
       file.write(g);
       file.write(b);
       file.close();
-
-      setLed(offset/3, r, g, b);
+      
+      leds[offset/3].setRGB(r, g, b);
       FastLED.show();
-    }
-
-    void get_config(ESP8266WebServer& server) {
-      File file = SPIFFS.open(PAINTBRUSH_FILE, "r");
-      size_t sent = server.streamFile(file, "application/octet-stream");
-      file.close();
-    }
-
-  private:
-    CRGB *leds;
-    void setLed(int index, byte r, byte g, byte b) {
-      leds[index] = CRGB(r, g, b);
     }
 };

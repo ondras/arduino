@@ -69,5 +69,6 @@ function paintbrush(parent) {
 FEATURES.appendChild(buildFeature("noop", "No-op"));
 FEATURES.appendChild(buildFeature("blinker", "Blinker"));
 FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
+FEATURES.appendChild(buildFeature("heart", "Heart"));
 
 fetch("/feature").then(response => response.text()).then(feature => setFeature(feature, {readOnly:true}));

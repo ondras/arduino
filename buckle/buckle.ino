@@ -1,15 +1,15 @@
 #define DEBUG_MSG Serial.println
-#define FEATURE_COUNT 3
+#define FEATURE_COUNT 4
 #define FASTLED_ALLOW_INTERRUPTS 0
-#define NUM_LEDS 64
-#define LED_PIN 0 // corresponds to Wemos pin D3
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <FS.h>
 #include <FastLED.h>
+#include "leds.h"
 #include "feature.h"
 #include "paintbrush.h"
+#include "heart.h"
 
 CRGB leds[NUM_LEDS];
 ESP8266WebServer server(80);
@@ -19,9 +19,10 @@ String current_feature_name;
 Blinker blinker;
 Feature noop;
 Paintbrush paintbrush;
+Heart heart;
 
-Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush };
-String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush" };
+Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush, &heart };
+String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush", "heart" };
 
 void setup() {
   Serial.begin(115200);
@@ -31,11 +32,11 @@ void setup() {
   DEBUG_MSG(String("SPIFFS ") + result);
 
   FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
-  int brightness = 80;
-  FastLED.setBrightness(brightness);
-  DEBUG_MSG(String("Brightness ") + brightness);
+  FastLED.setBrightness(BRIGHTNESS);
+  DEBUG_MSG(String("Brightness ") + BRIGHTNESS);
 
   paintbrush.begin(leds);
+  heart.begin(leds);
 
   server.serveStatic("/", SPIFFS, "/index.html");
   server.serveStatic("/index.css", SPIFFS, "/index.css");
