@@ -6,7 +6,8 @@
 class Feature {
   public:
     virtual void setup() {}
-    virtual void config(ESP8266WebServer& server) {}
+    virtual void get_config(ESP8266WebServer& server) {}
+    virtual void set_config(ESP8266WebServer& server) {}
     virtual void loop() {}
 };
 

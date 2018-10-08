@@ -36,10 +36,12 @@ void setup() {
   DEBUG_MSG(String("Brightness ") + brightness);
 
   server.serveStatic("/", SPIFFS, "/index.html");
-  server.serveStatic(PAINTBRUSH_FILE, SPIFFS, PAINTBRUSH_FILE);
+  server.serveStatic("/index.css", SPIFFS, "/index.css");
+  server.serveStatic("/index.js", SPIFFS, "/index.js");
   server.on("/feature", HTTP_GET, onGetFeature);
   server.on("/feature", HTTP_POST, onPostFeature);
-  server.on("/config", HTTP_POST, onConfig);
+  server.on("/config", HTTP_GET, onGetConfig);
+  server.on("/config", HTTP_POST, onPostConfig);
   server.begin();
 
   setFeature(String("noop"));
@@ -64,14 +66,20 @@ void onGetFeature() {
 
 void onPostFeature() {
   String feature = server.arg("feature");
-  DEBUG_MSG("onFeature " + feature);
   setFeature(feature);
 }
 
-void onConfig() {
-  DEBUG_MSG("onConfig");
+void onGetConfig() {
   if (current_feature) { 
-    current_feature->config(server);
+    current_feature->get_config(server);
+  } else {
+    server.send(404, "text/plain", "No feature");
+  }
+}
+
+void onPostConfig() {
+  if (current_feature) { 
+    current_feature->set_config(server);
     server.send(200, "text/plain", "Oll Korrect");
   } else {
     server.send(404, "text/plain", "No feature");

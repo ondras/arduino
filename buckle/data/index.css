@@ -1,0 +1,35 @@
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+#features {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	grid-gap: 4px;
+	margin: 8px;
+}
+
+#features button {
+	height: 40px;
+	padding: 0;
+}
+
+#feature {
+	margin: 8px;
+}
+
+[type=color] {
+	width: 100%;
+	height: 50px;
+	padding: 0;
+}
+
+[data-feature=paintbrush] {
+	display: grid;
+	grid-gap: 4px;
+	grid-template-columns: repeat(8, 1fr);
+}
+
+[data-feature=paintbrush] span {
+	width: 100%;
+	height: 40px;
+}

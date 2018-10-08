@@ -5,13 +5,15 @@
 #include <FastLED.h>
 #include <FS.h>
 
+unsigned char EMPTY[] = { 0, 0, 0 };
+
 class Paintbrush : public Feature {
   public:
     Paintbrush(CRGB* leds) : leds(leds) {
       if (!SPIFFS.exists(PAINTBRUSH_FILE)) {
         File file = SPIFFS.open(PAINTBRUSH_FILE, "w");
         for (int i=0; i<N*N; i++) {
-          file.write('0');
+          file.write(EMPTY, sizeof(EMPTY));
         }
         file.close();
       }
@@ -26,7 +28,7 @@ class Paintbrush : public Feature {
       FastLED.show();
     }
 
-    void config(ESP8266WebServer& server) {
+    void set_config(ESP8266WebServer& server) {
       int offset = server.arg("offset").toInt();
       byte r = server.arg("r").toInt();
       byte g = server.arg("g").toInt();
@@ -41,7 +43,12 @@ class Paintbrush : public Feature {
 
       setLed(offset/3, r, g, b);
       FastLED.show();
+    }
 
+    void get_config(ESP8266WebServer& server) {
+      File file = SPIFFS.open(PAINTBRUSH_FILE, "r");
+      size_t sent = server.streamFile(file, "application/octet-stream");
+      file.close();
     }
 
   private:
