@@ -1,6 +1,37 @@
 const FEATURES = document.querySelector("#features");
 const FEATURE = document.querySelector("#feature");
 
+function renderLeds(parent) {
+	let all = document.createElement("div");
+	all.classList.add("leds");
+	parent.appendChild(all);
+
+	function buildOne(r, g, b, offset) {
+		let node = document.createElement("span");
+		node.dataset.offset = offset;
+		node.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+		return node;
+	}
+
+	function buildAll(data) {
+		let leds = [];
+		let view = new Uint8Array(data);
+		let i=0;
+		while (i < view.length) {
+			let r = view[i+0];
+			let g = view[i+1];
+			let b = view[i+2];
+			let node = buildOne(r, g, b, i);
+			all.appendChild(node);
+			leds.push(node);
+			i+=3;
+		}
+		return leds;
+	}
+
+	return fetch("/config").then(response => response.arrayBuffer()).then(buildAll);	
+}
+
 function showError(e) {
 	alert(e.message);
 }
@@ -31,7 +62,7 @@ function paintbrush(parent) {
 	let color = document.createElement("input");
 	color.type = "color";
 
-	function saveOne(offset) {
+	function save(offset) {
 		let num = parseInt(color.value.slice(1), 16);
 		let fd = new FormData();
 		fd.set("offset", offset);
@@ -41,34 +72,27 @@ function paintbrush(parent) {
 		fetch("/config", {method:"POST", body:fd});
 	}
 
-	function buildOne(r, g, b, offset) {
-		let node = document.createElement("span");
-		parent.appendChild(node);
-		node.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-		node.addEventListener("click", e => {
-			node.style.backgroundColor = color.value;
-			saveOne(offset);
+	renderLeds(parent).then(leds => {
+		leds.forEach(led => {
+			led.addEventListener("click", e => {
+				led.style.backgroundColor = color.value;
+				save(led.dataset.offset);
+			});
 		});
-	}
-
-	function buildAll(data) {
-		let view = new Uint8Array(data);
-		let i=0;
-		while (i < view.length) {
-			let r = view[i+0];
-			let g = view[i+1];
-			let b = view[i+2];
-			buildOne(r, g, b, i);
-			i+=3;
-		}
 		parent.appendChild(color);
-	}
-	fetch("/config").then(response => response.arrayBuffer()).then(buildAll);
+	});
+}
+
+function image(parent) {
+	let current = document.createElement("div");
+	renderLeds(current);
+	parent.appendChild(current);
 }
 
 FEATURES.appendChild(buildFeature("noop", "No-op"));
 FEATURES.appendChild(buildFeature("blinker", "Blinker"));
 FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
 FEATURES.appendChild(buildFeature("heart", "Heart"));
+FEATURES.appendChild(buildFeature("image", "Image"));
 
 fetch("/feature").then(response => response.text()).then(feature => setFeature(feature, {readOnly:true}));

@@ -1,5 +1,5 @@
 #define DEBUG_MSG Serial.println
-#define FEATURE_COUNT 4
+#define FEATURE_COUNT 5
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <ESP8266WiFi.h>
@@ -10,9 +10,11 @@
 #include "feature.h"
 #include "paintbrush.h"
 #include "heart.h"
+#include "image.h"
 
 CRGB leds[NUM_LEDS];
 ESP8266WebServer server(80);
+
 Feature * current_feature;
 String current_feature_name;
 
@@ -20,14 +22,16 @@ Blinker blinker;
 Feature noop;
 Paintbrush paintbrush;
 Heart heart;
+Image image;
 
-Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush, &heart };
-String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush", "heart" };
+Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush, &heart, &image };
+String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush", "heart", "image" };
 
 void setup() {
   Serial.begin(115200);
-  boolean result = WiFi.softAP("esp-ap");
+  bool result = WiFi.softAP("esp-ap");
   DEBUG_MSG(String("AP ") + result);
+
   result = SPIFFS.begin();
   DEBUG_MSG(String("SPIFFS ") + result);
 
@@ -37,6 +41,7 @@ void setup() {
 
   paintbrush.begin(leds);
   heart.begin(leds);
+  image.begin(leds);
 
   server.serveStatic("/", SPIFFS, "/index.html");
   server.serveStatic("/index.css", SPIFFS, "/index.css");
@@ -47,10 +52,10 @@ void setup() {
   server.on("/config", HTTP_POST, onPostConfig);
   server.begin();
 
-  setFeature(String("noop"));
+  set_feature(String("noop"));
 }
 
-void setFeature(const String& feature) {
+void set_feature(const String& feature) {
   int index = -1;
   for (int i=0; i<FEATURE_COUNT; i++) {
     if (NAMES[i] == feature) { index = i; }  
@@ -69,7 +74,7 @@ void onGetFeature() {
 
 void onPostFeature() {
   String feature = server.arg("feature");
-  setFeature(feature);
+  set_feature(feature);
 }
 
 void onGetConfig() {

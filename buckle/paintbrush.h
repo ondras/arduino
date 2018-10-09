@@ -21,17 +21,12 @@ class Paintbrush : public Leds {
       }
     }
 
-    void setup() {
-      File file = SPIFFS.open(PAINTBRUSH_FILE, "r");
-      byte rgb[3];
-      for (int i=0; i<N*N; i++) {
-        file.read(rgb, sizeof(rgb));
-        leds[i].setRGB(rgb[0], rgb[1], rgb[2]);
-      }
+    void setup() override {
+      load_file(PAINTBRUSH_FILE);
       FastLED.show();
     }
 
-    void set_config(ESP8266WebServer& server) {
+    void set_config(ESP8266WebServer& server) override {
       int offset = server.arg("offset").toInt();
       byte r = server.arg("r").toInt();
       byte g = server.arg("g").toInt();

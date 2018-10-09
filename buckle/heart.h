@@ -13,11 +13,9 @@ const bool MASK[NUM_LEDS] = {
   0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-CRGBPalette16 palette;
-
 class Heart : public Leds {
   public:
-    void begin(CRGB* leds) {
+    void begin(CRGB* leds) override {
       Leds::begin(leds);
 
       fill_solid(palette, 16, CRGB::Red);
@@ -26,7 +24,8 @@ class Heart : public Leds {
       palette[8] = CRGB::Magenta;
       palette[12] = CRGB::Yellow;    
     }
-    void loop() {
+
+    void loop() override {
       double time = millis();
       int index = int(time/500) % 256;
       CRGB color = ColorFromPalette(palette, index);
@@ -36,4 +35,7 @@ class Heart : public Leds {
       FastLED.show();
       FastLED.delay(30);
     }
+
+  private:
+    CRGBPalette16 palette;
 };

@@ -13,7 +13,7 @@ body { margin: 0; }
 	padding: 0;
 }
 
-#features button.active {
+button.active {
 	font-weight: bold;
 }
 
@@ -27,13 +27,14 @@ body { margin: 0; }
 	padding: 0;
 }
 
-#feature[data-feature=paintbrush] {
+.leds {
 	display: grid;
 	grid-gap: 4px;
 	grid-template-columns: repeat(8, 1fr);
+	margin-bottom: 8px;
 }
 
-#feature[data-feature=paintbrush] span {
+.leds span {
 	width: 100%;
 	height: 40px;
 }

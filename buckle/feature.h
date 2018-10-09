@@ -3,14 +3,15 @@
 
 #include <ESP8266WebServer.h>
 #include <FastLED.h>
+#include <FS.h>
 #include "leds.h"
 
 class Feature {
   public:
     virtual void setup() {}
+    virtual void loop() {}
     virtual void get_config(ESP8266WebServer& server) {}
     virtual void set_config(ESP8266WebServer& server) {}
-    virtual void loop() {}
 };
 
 class Blinker : public Feature {
@@ -41,7 +42,7 @@ class Leds : public Feature {
       this->leds = leds;
     }
 
-    virtual void get_config(ESP8266WebServer& server) {
+    virtual void get_config(ESP8266WebServer& server) override {
       char bytes[NUM_LEDS * 3];
       for (int i=0; i<NUM_LEDS; i++) {
         bytes[3*i+0] = leds[i].r;
@@ -62,6 +63,18 @@ class Leds : public Feature {
       for (int i=0; i<NUM_LEDS; i++) {
         leds[i] = CRGB::Black;
       }
+    }
+
+    bool load_file(String name) {
+      if (!SPIFFS.exists(name)) { return false; }
+
+      File file = SPIFFS.open(name, "r");
+      byte rgb[3];
+      for (int i=0; i<N*N; i++) {
+        file.read(rgb, sizeof(rgb));
+        leds[i].setRGB(rgb[0], rgb[1], rgb[2]);
+      }
+      return true;
     }
 };
 
