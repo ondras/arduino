@@ -38,7 +38,6 @@ function showError(e) {
 
 function setFeature(feature, options = {}) {
 	FEATURE.innerHTML = "";
-	FEATURE.dataset.feature = feature;
 
 	Array.from(FEATURES.querySelectorAll("button")).forEach(button => {
 		button.classList.toggle("active", button.dataset.feature == feature);
@@ -89,10 +88,45 @@ function image(parent) {
 	parent.appendChild(current);
 }
 
+function arrow(parent) {
+	let color = document.createElement("input");
+	color.type = "color";
+
+	const arrows = {
+		"↑": 0,
+		"→": 1,
+		"↓": 2,
+		"←": 3
+	};
+
+	function save(orientation) {
+		let num = parseInt(color.value.slice(1), 16);
+		let fd = new FormData();
+		fd.set("orientation", orientation);
+		fd.set("r", num >> 16);
+		fd.set("g", (num >> 8) & 0xff);
+		fd.set("b", num & 0xff);
+		fetch("/config", {method:"POST", body:fd});
+	}
+
+	let block = document.createElement("div");
+	block.classList.add("arrows");
+	parent.appendChild(block);
+	Object.keys(arrows).forEach(arrow => {
+		let button = document.createElement("button");
+		button.textContent = arrow;
+		button.addEventListener("click", e => save(arrows[arrow]));
+		block.appendChild(button);
+	});
+
+	parent.appendChild(color);
+}
+
 FEATURES.appendChild(buildFeature("noop", "No-op"));
 FEATURES.appendChild(buildFeature("blinker", "Blinker"));
 FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
 FEATURES.appendChild(buildFeature("heart", "Heart"));
 FEATURES.appendChild(buildFeature("image", "Image"));
+FEATURES.appendChild(buildFeature("arrow", "Arrow"));
 
 fetch("/feature").then(response => response.text()).then(feature => setFeature(feature, {readOnly:true}));

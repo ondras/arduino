@@ -39,7 +39,7 @@ class Paintbrush : public Leds {
       file.write(b);
       file.close();
       
-      leds[offset/3].setRGB(r, g, b);
+      set_led(offset/3, CRGB(r, g, b));
       FastLED.show();
     }
 };

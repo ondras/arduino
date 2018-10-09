@@ -1,5 +1,5 @@
 #define DEBUG_MSG Serial.println
-#define FEATURE_COUNT 5
+#define FEATURE_COUNT 6
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <ESP8266WiFi.h>
@@ -11,6 +11,7 @@
 #include "paintbrush.h"
 #include "heart.h"
 #include "image.h"
+#include "arrow.h"
 
 CRGB leds[NUM_LEDS];
 ESP8266WebServer server(80);
@@ -23,9 +24,10 @@ Feature noop;
 Paintbrush paintbrush;
 Heart heart;
 Image image;
+Arrow arrow;
 
-Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush, &heart, &image };
-String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush", "heart", "image" };
+Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush, &heart, &image, &arrow };
+String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush", "heart", "image", "arrow" };
 
 void setup() {
   Serial.begin(115200);
@@ -42,6 +44,7 @@ void setup() {
   paintbrush.begin(leds);
   heart.begin(leds);
   image.begin(leds);
+  arrow.begin(leds);
 
   server.serveStatic("/", SPIFFS, "/index.html");
   server.serveStatic("/index.css", SPIFFS, "/index.css");

@@ -44,10 +44,13 @@ class Leds : public Feature {
 
     virtual void get_config(ESP8266WebServer& server) override {
       char bytes[NUM_LEDS * 3];
+      Serial.println("get_config");
       for (int i=0; i<NUM_LEDS; i++) {
-        bytes[3*i+0] = leds[i].r;
-        bytes[3*i+1] = leds[i].g;
-        bytes[3*i+2] = leds[i].b;
+        CRGB rgb = get_led(i);
+        Serial.println(rgb);
+        bytes[3*i+0] = rgb.r;
+        bytes[3*i+1] = rgb.g;
+        bytes[3*i+2] = rgb.b;
       }
 
       int content_length = sizeof(bytes);
@@ -58,11 +61,24 @@ class Leds : public Feature {
 
   protected:
     CRGB *leds;
+    byte orientation = 0;
 
     void clear() {
-      for (int i=0; i<NUM_LEDS; i++) {
-        leds[i] = CRGB::Black;
-      }
+      fill_solid(leds, NUM_LEDS, CRGB::Black);
+    }
+
+    void set_led(int i, CRGB rgb) {
+      i = fix_index(i);
+      leds[i] = rgb;
+    }
+
+    CRGB get_led(int i) {
+      i = fix_index(i);
+      return leds[i];
+    }
+
+    int fix_index(int i) {
+      return ::fix_index(i, orientation);
     }
 
     bool load_file(String name) {
@@ -72,7 +88,7 @@ class Leds : public Feature {
       byte rgb[3];
       for (int i=0; i<N*N; i++) {
         file.read(rgb, sizeof(rgb));
-        leds[i].setRGB(rgb[0], rgb[1], rgb[2]);
+        set_led(i, CRGB(rgb[0], rgb[1], rgb[2]));
       }
       return true;
     }

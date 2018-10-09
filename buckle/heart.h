@@ -2,40 +2,32 @@
 #include "leds.h"
 #include <FastLED.h>
 
-const bool MASK[NUM_LEDS] = {
-  0, 1, 1, 0, 0, 1, 1, 0,
-  1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1,
-  0, 1, 1, 1, 1, 1, 1, 0,
-  0, 0, 1, 1, 1, 1, 0, 0,
-  0, 0, 0, 1, 1, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
+const bool HEART_MASK[NUM_LEDS] = {
+  0,1,1,0,0,1,1,0,
+  1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,
+  0,1,1,1,1,1,1,0,
+  0,0,1,1,1,1,0,0,
+  0,0,0,1,1,0,0,0,
+  0,0,0,0,0,0,0,0,
 };
+
+const int hue_min = 240;
+const int hue_max = 5;
 
 class Heart : public Leds {
   public:
-    void begin(CRGB* leds) override {
-      Leds::begin(leds);
-
-      fill_solid(palette, 16, CRGB::Red);
-      palette[0] = CRGB::Pink;
-      palette[4] = CRGB::Orange;
-      palette[8] = CRGB::Magenta;
-      palette[12] = CRGB::Yellow;    
-    }
-
     void loop() override {
       double time = millis();
-      int index = int(time/500) % 256;
-      CRGB color = ColorFromPalette(palette, index);
+      fract8 fraction = triwave8(time/30);
+      int hue = map8(fraction, hue_min, hue_max);
+
+      CRGB rgb = CHSV(hue, 255, 255);
       for (int i=0; i<NUM_LEDS; i++) {
-        leds[i] = (MASK[i] ? color : CRGB::Black);
+        set_led(i, (HEART_MASK[i] ? rgb : CRGB::Black));
       }
       FastLED.show();
-      FastLED.delay(30);
+      FastLED.delay(20);
     }
-
-  private:
-    CRGBPalette16 palette;
 };
