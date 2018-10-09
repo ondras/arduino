@@ -15,11 +15,6 @@ const bool ARROW_MASK[NUM_LEDS] = {
 
 class Arrow : public Leds {
   public:
-    void setup() override {
-      clear();
-      FastLED.show();
-    }
-
     void set_config(ESP8266WebServer& server) override {
       orientation = server.arg("orientation").toInt();
       byte r = server.arg("r").toInt();
