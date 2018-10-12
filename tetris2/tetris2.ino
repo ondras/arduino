@@ -21,8 +21,9 @@
 
 
 //Weights weights { .holes = 20, .max_depth = 2, .cells = 1, .max_slope = 1, .slope = 1, .weighted_cells = 1 };
-Weights weights { .holes = 11.8, .max_depth = 0.1, .cells = -1.1, .max_slope = 0.6, .slope = 2.2, .weighted_cells = 0.6 };
-Game game(&output, &weights);
+//Weights weights { .holes = 11.8, .max_depth = 0.1, .cells = -1.1, .max_slope = 0.6, .slope = 2.2, .weighted_cells = 0.6 };
+//Game game(&output, weights);
+Game game(output);
 
 void setup() {
 //	randomSeed(analogRead(A0) * analogRead(A1) * analogRead(A2));

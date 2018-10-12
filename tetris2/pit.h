@@ -11,7 +11,7 @@ typedef struct {
 
 class Pit {
 	public:
-		Pit(Weights*);
+		Pit(Weights&);
 		byte cleanup();
 		void clear();
 		float score();

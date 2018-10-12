@@ -10,8 +10,8 @@ class Piece {
 		void center();
 		void pick();
 		void action(byte);
-		bool fits(Pit *);
-		void addTo(Pit *);
+		bool fits(Pit&);
+		void addTo(Pit&);
 		byte color;
 		byte shape;
 		byte rotation;

@@ -1,7 +1,7 @@
 #include "pit.h"
 #include "stdio.h"
 
-Pit::Pit(Weights * weights): weights(weights) {}
+Pit::Pit(Weights& weights): weights(&weights) {}
 
 void Pit::clear() {
 	for (int x=0;x<WIDTH;x++) { 

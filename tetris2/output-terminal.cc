@@ -40,7 +40,7 @@ void OutputTerminal::setPixel(byte x, byte y, byte color) {
 	printf("%so" RESET, COLORS[color]);
 }
 
-void OutputTerminal::draw(Pit * pit, Piece * piece) {
+void OutputTerminal::draw(Pit& pit, Piece& piece) {
 	Output::draw(pit, piece);
 	fflush(stdout);
 }

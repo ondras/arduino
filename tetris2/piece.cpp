@@ -16,7 +16,7 @@ void Piece::center() {
 	this->position = (WIDTH-SHAPE_SIZE)/2;
 }
 
-bool Piece::fits(Pit * pit) {
+bool Piece::fits(Pit& pit) {
 	int x, y, i, j;
 	bool bit;
 
@@ -34,7 +34,7 @@ bool Piece::fits(Pit * pit) {
 
 			if (x < 0 || x >= WIDTH) { return false; }
 			if (y < 0) { return false; }
-			if (pit->data[x][y] > 0) { return false; }
+			if (pit.data[x][y] > 0) { return false; }
 		}
 	}
 
@@ -69,7 +69,7 @@ void Piece::action(byte action) {
 	}
 }
 
-void Piece::addTo(Pit * pit) {
+void Piece::addTo(Pit& pit) {
 	int x, y, i, j;
 	bool bit;
 
@@ -84,7 +84,7 @@ void Piece::addTo(Pit * pit) {
 			y = this->depth - j;
 			if (y >= DEPTH) { continue; } /* out of the pit */
 
-			pit->data[x][y] = this->color;
+			pit.data[x][y] = this->color;
 		}
 	}
 }

@@ -13,9 +13,11 @@
 #define ACTION_ROTATE_R 	4
 #define ACTION_UNDO_DROP	5
 
+extern Weights default_weights;
+
 class Game {
 	public:
-		Game(Output*, Weights*);
+		Game(Output&, Weights& = default_weights);
 		void start();
 		void step();
 		bool playing;
@@ -25,7 +27,7 @@ class Game {
 		AI ai;
 		Piece piece;
 		Pit pit;
-		Output* output;
+		Output& output;
 		void newPiece();
 		void gameOver();
 };
