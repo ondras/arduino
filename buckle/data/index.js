@@ -3,8 +3,8 @@ const FEATURE = document.querySelector("#feature");
 
 function renderLeds(parent) {
 	parent.innerHTML = "";
-	let all = document.createElement("div");
-	all.classList.add("leds");
+	let all = document.createElement("section");
+	all.classList.add("grid", "leds");
 	parent.appendChild(all);
 
 	function buildOne(r, g, b, offset) {
@@ -84,6 +84,8 @@ function paintbrush(parent) {
 }
 
 function image(parent) {
+	let images = document.createElement("section");
+	images.classList.add("grid", "buttons");
 	let current = document.createElement("div");
 
 	function setImage(image) {
@@ -96,9 +98,10 @@ function image(parent) {
 		let button = document.createElement("button");
 		button.textContent = image;
 		button.addEventListener("click", e => setImage(image));
-		parent.appendChild(button);
+		images.appendChild(button);
 	});
 
+	parent.appendChild(images);
 	parent.appendChild(current);
 }
 
@@ -123,14 +126,15 @@ function arrow(parent) {
 		fetch("/config", {method:"POST", body:fd});
 	}
 
-	let block = document.createElement("div");
-	block.classList.add("arrows");
-	parent.appendChild(block);
+	let buttons = document.createElement("section");
+	buttons.classList.add("grid", "buttons");
+	parent.appendChild(buttons);
 	Object.keys(arrows).forEach(arrow => {
 		let button = document.createElement("button");
+		button.classList.add("arrow");
 		button.textContent = arrow;
 		button.addEventListener("click", e => save(arrows[arrow]));
-		block.appendChild(button);
+		buttons.appendChild(button);
 	});
 
 	parent.appendChild(color);
@@ -142,5 +146,6 @@ FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
 FEATURES.appendChild(buildFeature("heart", "Heart"));
 FEATURES.appendChild(buildFeature("image", "Image"));
 FEATURES.appendChild(buildFeature("arrow", "Arrow"));
+FEATURES.appendChild(buildFeature("tetris", "Tetris"));
 
 fetch("/feature").then(response => response.text()).then(feature => setFeature(feature, {readOnly:true}));
