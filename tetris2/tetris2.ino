@@ -1,8 +1,5 @@
-#include "game.h"
-#include "pit.h"
-#include "output-terminal.h"
+#include <tetris.h>
 #include "output-rgbmatrix.h"
-#include "output.h"
 
 #ifdef BENCH
 	#include <stdio.h>

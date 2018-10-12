@@ -1,4 +1,4 @@
-#include "output.h"
+#include <output.h>
 #include <Arduino.h>
 
 class OutputRGBMatrix : public Output {
@@ -6,7 +6,7 @@ class OutputRGBMatrix : public Output {
 		OutputRGBMatrix();
 		void setScore(int);
 		void newGame();
-		void draw(Pit *, Piece *);
+		void draw(Pit&, Piece&);
 
 	private:
 		void setPixel(byte, byte, byte);

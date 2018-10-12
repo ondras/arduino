@@ -2,6 +2,7 @@ const FEATURES = document.querySelector("#features");
 const FEATURE = document.querySelector("#feature");
 
 function renderLeds(parent) {
+	parent.innerHTML = "";
 	let all = document.createElement("div");
 	all.classList.add("leds");
 	parent.appendChild(all);
@@ -84,7 +85,20 @@ function paintbrush(parent) {
 
 function image(parent) {
 	let current = document.createElement("div");
-	renderLeds(current);
+
+	function setImage(image) {
+		let fd = new FormData();
+		fd.set("image", image);
+		fetch("/config", {method:"POST", body:fd}).then(r => r.text()).then(() => renderLeds(current));
+	}
+
+	["flag"].forEach(image => {
+		let button = document.createElement("button");
+		button.textContent = image;
+		button.addEventListener("click", e => setImage(image));
+		parent.appendChild(button);
+	});
+
 	parent.appendChild(current);
 }
 

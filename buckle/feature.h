@@ -44,10 +44,8 @@ class Leds : public Feature {
 
     virtual void get_config(ESP8266WebServer& server) override {
       char bytes[NUM_LEDS * 3];
-      Serial.println("get_config");
       for (int i=0; i<NUM_LEDS; i++) {
         CRGB rgb = get_led(i);
-        Serial.println(rgb);
         bytes[3*i+0] = rgb.r;
         bytes[3*i+1] = rgb.g;
         bytes[3*i+2] = rgb.b;

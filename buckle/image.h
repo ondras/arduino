@@ -5,10 +5,10 @@
 
 class Image : public Leds {
   public:
-    void setup() override {
+    void set_config(ESP8266WebServer& server) {
+      String file = String("/") + server.arg("image") + String(".dat");
       clear();
-      bool ok = load_file("/flag.dat");
-      Serial.println(String("LOAD FILE ") + ok);
+      bool ok = load_file(file);
       FastLED.show();
     }
 };

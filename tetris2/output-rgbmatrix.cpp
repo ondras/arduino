@@ -48,7 +48,7 @@ void OutputRGBMatrix::setPixel(byte x, byte y, byte color) {
 	leds[index] = COLORS[color];
 }
 
-void OutputRGBMatrix::draw(Pit * pit, Piece * piece) {
+void OutputRGBMatrix::draw(Pit& pit, Piece& piece) {
 	Output::draw(pit, piece);
 	FastLED.show();
 }

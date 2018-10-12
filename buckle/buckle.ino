@@ -79,8 +79,7 @@ void onGetFeature() {
 }
 
 void onPostFeature() {
-  String feature = server.arg("feature");
-  set_feature(feature);
+  set_feature(server.arg("feature"));
 }
 
 void onGetConfig() {

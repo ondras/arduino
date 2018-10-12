@@ -1,11 +1,8 @@
 #include <FastLED.h>
 #include <FS.h>
+#include <tetris.h>
 #include "feature.h"
 #include "leds.h"
-#include <game.h>
-#include <pit.h>
-#include <shapes.h>
-#include <output.h>
 
 CRGB COLORS[COLOR_COUNT+1] = {
   CRGB::Black,
@@ -28,15 +25,19 @@ class Tetris : public Leds, Output {
     void loop() override {
       game.step();
       if (game.playing) {
-        delay(50);
+        delay(delay_ms);
       } else {
         delay(1000);
         game.start();
       }
     }
 
+    void set_config(ESP8266WebServer& server) {
+      delay_ms = server.arg("delay").toInt();
+    }
+
     void setPixel(byte x, byte y, byte color) {
-      set_led(x + y*N, color);
+      set_led(x + y*N, COLORS[color]);
     }
     
     void draw(Pit& pit, Piece& piece) {
@@ -46,4 +47,5 @@ class Tetris : public Leds, Output {
 
   private:
     Game game;
+    int delay_ms = 80;
 };
