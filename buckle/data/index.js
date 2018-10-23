@@ -94,7 +94,7 @@ function image(parent) {
 		fetch("/config", {method:"POST", body:fd}).then(r => r.text()).then(() => renderLeds(current));
 	}
 
-	["flag"].forEach(image => {
+	["flag", "smile"].forEach(image => {
 		let button = document.createElement("button");
 		button.textContent = image;
 		button.addEventListener("click", e => setImage(image));
@@ -140,8 +140,35 @@ function arrow(parent) {
 	parent.appendChild(color);
 }
 
-FEATURES.appendChild(buildFeature("noop", "No-op"));
-FEATURES.appendChild(buildFeature("blinker", "Blinker"));
+function tetris(parent) {
+	let times = [0, 30, 50, 100, 200];
+
+	function setDelay(delay) {
+		let fd = new FormData();
+		fd.set("delay", delay);
+		fetch("/config", {method:"POST", body:fd});
+	}
+
+	function buildSelect(current) {
+		let select = document.createElement("select");
+		current = Number(current);
+		if (!(times.includes(current))) { times.push(current); }
+		times.forEach(time => {
+			let option = document.createElement("option");
+			option.value = time;
+			option.textContent = time;
+			select.appendChild(option);
+		});
+		select.value = current;
+		parent.appendChild(select);
+		select.addEventListener("change", e => setDelay(select.value));
+	}
+
+	return fetch("/config").then(response => response.text()).then(buildSelect);
+
+}
+
+FEATURES.appendChild(buildFeature("clear", "Clear"));
 FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
 FEATURES.appendChild(buildFeature("heart", "Heart"));
 FEATURES.appendChild(buildFeature("image", "Image"));

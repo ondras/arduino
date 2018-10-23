@@ -16,7 +16,7 @@ const bool HEART_MASK[NUM_LEDS] = {
 const int hue_min = 240;
 const int hue_max = 5;
 
-class Heart : public Leds {
+class Heart : public Feature {
   public:
     void loop() override {
       double time = millis();

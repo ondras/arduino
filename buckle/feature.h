@@ -8,41 +8,17 @@
 
 class Feature {
   public:
-    virtual void setup() {}
     virtual void loop() {}
-    virtual void get_config(ESP8266WebServer& server) {}
-    virtual void set_config(ESP8266WebServer& server) {}
-};
 
-class Blinker : public Feature {
-  public:
-    Blinker() {
-      pin = 2;  
-      state = true;
-    }
-    void setup() {
-      DEBUG_MSG("blinker here");
-      pinMode(pin, OUTPUT);
-    }
-
-    void loop() {
-      state = !state;
-      digitalWrite(pin, state);
-      delay(100);
-    }
-
-  private:
-    int pin;
-    bool state;
-};
-
-class Leds : public Feature {
-  public:
     virtual void begin(CRGB* leds) {
       this->leds = leds;
     }
 
-    virtual void get_config(ESP8266WebServer& server) override {
+    virtual void setup() {}
+
+    virtual void set_config(ESP8266WebServer& server) {}
+
+    virtual void get_config(ESP8266WebServer& server) {
       char bytes[NUM_LEDS * 3];
       for (int i=0; i<NUM_LEDS; i++) {
         CRGB rgb = get_led(i);
@@ -91,5 +67,37 @@ class Leds : public Feature {
       return true;
     }
 };
+
+class Clear : public Feature {
+  public:
+    void setup() {
+      clear();
+      FastLED.show();
+    }
+};
+
+/*
+class Blinker : public Feature {
+  public:
+    Blinker() {
+      pin = 2;  
+      state = true;
+    }
+    void setup() {
+      DEBUG_MSG("blinker here");
+      pinMode(pin, OUTPUT);
+    }
+
+    void loop() {
+      state = !state;
+      digitalWrite(pin, state);
+      delay(100);
+    }
+
+  private:
+    int pin;
+    bool state;
+};
+*/
 
 #endif

@@ -14,7 +14,7 @@ CRGB COLORS[COLOR_COUNT+1] = {
   CRGB::Magenta
 };
 
-class Tetris : public Leds, Output {
+class Tetris : public Feature, Output {
   public:
     Tetris() : game(Game(*this)) {}
 
@@ -34,6 +34,10 @@ class Tetris : public Leds, Output {
 
     void set_config(ESP8266WebServer& server) {
       delay_ms = server.arg("delay").toInt();
+    }
+
+    void get_config(ESP8266WebServer& server) {
+      server.send(200, "text/plain", String(delay_ms));
     }
 
     void setPixel(byte x, byte y, byte color) {

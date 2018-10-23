@@ -13,7 +13,7 @@ const bool ARROW_MASK[NUM_LEDS] = {
   0,0,0,1,1,0,0,0,
 };
 
-class Arrow : public Leds {
+class Arrow : public Feature {
   public:
     void set_config(ESP8266WebServer& server) override {
       orientation = server.arg("orientation").toInt();

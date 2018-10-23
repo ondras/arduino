@@ -7,10 +7,10 @@
 
 unsigned char EMPTY[] = { 0, 0, 0 };
 
-class Paintbrush : public Leds {
+class Paintbrush : public Feature {
   public:
     void begin(CRGB* leds) {
-      Leds::begin(leds);
+      Feature::begin(leds);
 
       if (!SPIFFS.exists(PAINTBRUSH_FILE)) {
         File file = SPIFFS.open(PAINTBRUSH_FILE, "w");

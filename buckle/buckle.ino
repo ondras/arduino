@@ -20,16 +20,15 @@ ESP8266WebServer server(80);
 Feature * current_feature;
 String current_feature_name;
 
-Blinker blinker;
-Feature noop;
+Clear clear;
 Paintbrush paintbrush;
 Heart heart;
 Image image;
 Arrow arrow;
 Tetris tetris;
 
-Feature * FEATURES[FEATURE_COUNT] = { &noop, &blinker, &paintbrush, &heart, &image, &arrow, &tetris };
-String NAMES[FEATURE_COUNT] = { "noop", "blinker", "paintbrush", "heart", "image", "arrow", "tetris" };
+Feature * FEATURES[FEATURE_COUNT] = { &clear, &paintbrush, &heart, &image, &arrow, &tetris };
+String NAMES[FEATURE_COUNT] = { "clear", "paintbrush", "heart", "image", "arrow", "tetris" };
 
 void setup() {
   Serial.begin(115200);
@@ -43,6 +42,7 @@ void setup() {
   FastLED.setBrightness(BRIGHTNESS);
   DEBUG_MSG(String("Brightness ") + BRIGHTNESS);
 
+  clear.begin(leds);
   paintbrush.begin(leds);
   heart.begin(leds);
   image.begin(leds);
@@ -58,7 +58,7 @@ void setup() {
   server.on("/config", HTTP_POST, onPostConfig);
   server.begin();
 
-  set_feature(String("noop"));
+  set_feature(String("clear"));
 }
 
 void set_feature(const String& feature) {
