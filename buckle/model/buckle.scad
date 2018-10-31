@@ -1,7 +1,7 @@
-$fn=50;
-inner=6.5;
+$fn = 80;
+inner = 6.5;
 thickness=0.6;
-height = 0.9;
+height = 1.0;
 belt = 4.2;
 holder_r = 0.35 / 2;
 holder_z = -1.3;
@@ -9,8 +9,8 @@ pin_r = 0.3 / 2;
 pin_length = 1.5;
 pin_head_offset = 0.3;
 pin_thickness = thickness/2.7;
-glass_size = inner + 2*0.1;
-glass_height = 0.2;
+glass_size = inner + 2*0.2;
+glass_height = 0.25;
 
 outer = inner + 2*thickness;
 rounded = 0.2;
