@@ -1,6 +1,14 @@
 const FEATURES = document.querySelector("#features");
 const FEATURE = document.querySelector("#feature");
 
+FEATURES.appendChild(buildFeature("clear", "Clear"));
+FEATURES.appendChild(buildFeature("brightness", "Brightness"));
+FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
+FEATURES.appendChild(buildFeature("heart", "Heart"));
+FEATURES.appendChild(buildFeature("image", "Image"));
+FEATURES.appendChild(buildFeature("arrow", "Arrow"));
+FEATURES.appendChild(buildFeature("tetris", "Tetris"));
+
 function renderLeds(parent) {
 	parent.innerHTML = "";
 	let all = document.createElement("section");
@@ -37,6 +45,12 @@ function showError(e) {
 	alert(e.message);
 }
 
+function postConfig(data) {
+	let fd = new FormData();
+	for (let p in data) { fd.set(p, data[p]); }
+	return fetch("/config", {method:"POST", body:fd});
+}
+
 function setFeature(feature, options = {}) {
 	FEATURE.innerHTML = "";
 
@@ -64,12 +78,12 @@ function paintbrush(parent) {
 
 	function save(offset) {
 		let num = parseInt(color.value.slice(1), 16);
-		let fd = new FormData();
-		fd.set("offset", offset);
-		fd.set("r", num >> 16);
-		fd.set("g", (num >> 8) & 0xff);
-		fd.set("b", num & 0xff);
-		fetch("/config", {method:"POST", body:fd});
+		postConfig({
+			offset,
+			r: num >> 16,
+			g: (num >> 8) & 0xff,
+			b: num & 0xff
+		});
 	}
 
 	renderLeds(parent).then(leds => {
@@ -89,9 +103,7 @@ function image(parent) {
 	let current = document.createElement("div");
 
 	function setImage(image) {
-		let fd = new FormData();
-		fd.set("image", image);
-		fetch("/config", {method:"POST", body:fd}).then(r => r.text()).then(() => renderLeds(current));
+		postConfig({image}).then(r => r.text()).then(() => renderLeds(current));
 	}
 
 	["flag", "smile"].forEach(image => {
@@ -118,12 +130,12 @@ function arrow(parent) {
 
 	function save(orientation) {
 		let num = parseInt(color.value.slice(1), 16);
-		let fd = new FormData();
-		fd.set("orientation", orientation);
-		fd.set("r", num >> 16);
-		fd.set("g", (num >> 8) & 0xff);
-		fd.set("b", num & 0xff);
-		fetch("/config", {method:"POST", body:fd});
+		postConfig({
+			orientation,
+			r: num >> 16,
+			g: (num >> 8) & 0xff,
+			b: num & 0xff
+		});
 	}
 
 	let buttons = document.createElement("section");
@@ -141,12 +153,10 @@ function arrow(parent) {
 }
 
 function tetris(parent) {
-	let times = [0, 30, 50, 100, 200];
+	let times = [30, 50, 100, 200];
 
 	function setDelay(delay) {
-		let fd = new FormData();
-		fd.set("delay", delay);
-		fetch("/config", {method:"POST", body:fd});
+		postConfig({delay});
 	}
 
 	function buildSelect(current) {
@@ -165,14 +175,30 @@ function tetris(parent) {
 	}
 
 	return fetch("/config").then(response => response.text()).then(buildSelect);
-
 }
 
-FEATURES.appendChild(buildFeature("clear", "Clear"));
-FEATURES.appendChild(buildFeature("paintbrush", "Paintbrush"));
-FEATURES.appendChild(buildFeature("heart", "Heart"));
-FEATURES.appendChild(buildFeature("image", "Image"));
-FEATURES.appendChild(buildFeature("arrow", "Arrow"));
-FEATURES.appendChild(buildFeature("tetris", "Tetris"));
+function brightness(parent) {
+	let current = document.createElement("span");
+	parent.appendChild(current);
+
+	let input = document.createElement("input");
+	input.type = "range";
+	input.min = 10;
+	input.max = 200;
+	input.step = 10;
+	parent.appendChild(input);
+
+	function sync() { current.textContent = input.value; }
+
+	input.addEventListener("input", e => {
+		sync();
+		postConfig({brightness: input.value});
+	})
+
+	return fetch("/config").then(response => response.text()).then(value => {
+		input.value = value;
+		sync();
+	});
+}
 
 fetch("/feature").then(response => response.text()).then(feature => setFeature(feature, {readOnly:true}));

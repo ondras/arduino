@@ -13,6 +13,7 @@
 #include "image.h"
 #include "arrow.h"
 #include "tetris.h"
+#include "brightness.h"
 
 CRGB leds[NUM_LEDS];
 ESP8266WebServer server(80);
@@ -26,9 +27,10 @@ Heart heart;
 Image image;
 Arrow arrow;
 Tetris tetris;
+Brightness brightness;
 
-Feature * FEATURES[FEATURE_COUNT] = { &clear, &paintbrush, &heart, &image, &arrow, &tetris };
-String NAMES[FEATURE_COUNT] = { "clear", "paintbrush", "heart", "image", "arrow", "tetris" };
+Feature * FEATURES[FEATURE_COUNT] = { &clear, &paintbrush, &heart, &image, &arrow, &tetris, &brightness };
+String NAMES[FEATURE_COUNT] = { "clear", "paintbrush", "heart", "image", "arrow", "tetris", "brightness" };
 
 void setup() {
   Serial.begin(115200);
@@ -39,6 +41,7 @@ void setup() {
   DEBUG_MSG(String("SPIFFS ") + result);
 
   FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.setMaxPowerInVoltsAndMilliamps(5, 1000);
   FastLED.setBrightness(BRIGHTNESS);
   DEBUG_MSG(String("Brightness ") + BRIGHTNESS);
 
@@ -48,6 +51,7 @@ void setup() {
   image.begin(leds);
   arrow.begin(leds);
   tetris.begin(leds);
+  brightness.begin(leds);
 
   server.serveStatic("/", SPIFFS, "/index.html");
   server.serveStatic("/index.css", SPIFFS, "/index.css");

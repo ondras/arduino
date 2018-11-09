@@ -26,4 +26,9 @@ button.active { font-weight: bold; }
 	padding: 0;
 }
 
+[type=range] {
+	width: 100%;
+	margin: 0;	
+}
+
 .arrow { font-size: 30px; }
