@@ -7,6 +7,7 @@ class Brightness : public Feature {
     void set_config(ESP8266WebServer& server) {
       int b = server.arg("brightness").toInt();
       FastLED.setBrightness(b);
+      FastLED.show();
     }
 
     void get_config(ESP8266WebServer& server) {
