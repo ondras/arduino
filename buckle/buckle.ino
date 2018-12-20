@@ -34,7 +34,7 @@ String NAMES[FEATURE_COUNT] = { "clear", "paintbrush", "heart", "image", "arrow"
 
 void setup() {
   Serial.begin(115200);
-  bool result = WiFi.softAP("esp-ap");
+  bool result = WiFi.softAP("esp-buckle", NULL, 1, true);
   DEBUG_MSG(String("AP ") + result);
 
   result = SPIFFS.begin();
