@@ -8,6 +8,7 @@ FEATURES.appendChild(buildFeature("heart", "Heart"));
 FEATURES.appendChild(buildFeature("image", "Image"));
 FEATURES.appendChild(buildFeature("arrow", "Arrow"));
 FEATURES.appendChild(buildFeature("tetris", "Tetris"));
+FEATURES.appendChild(buildFeature("snake", "Snake"));
 
 function renderLeds(parent) {
 	parent.innerHTML = "";

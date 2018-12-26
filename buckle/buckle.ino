@@ -1,5 +1,5 @@
 #define DEBUG_MSG Serial.println
-#define FEATURE_COUNT 7
+#define FEATURE_COUNT 8
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <ESP8266WiFi.h>
@@ -13,6 +13,7 @@
 #include "image.h"
 #include "arrow.h"
 #include "tetris.h"
+#include "snake.h"
 #include "brightness.h"
 
 CRGB leds[NUM_LEDS];
@@ -27,10 +28,11 @@ Heart heart;
 Image image;
 Arrow arrow;
 Tetris tetris;
+Snake snake;
 Brightness brightness;
 
-Feature * FEATURES[FEATURE_COUNT] = { &clear, &paintbrush, &heart, &image, &arrow, &tetris, &brightness };
-String NAMES[FEATURE_COUNT] = { "clear", "paintbrush", "heart", "image", "arrow", "tetris", "brightness" };
+Feature * FEATURES[FEATURE_COUNT] = { &clear, &paintbrush, &heart, &image, &arrow, &tetris, &snake, &brightness };
+String NAMES[FEATURE_COUNT] = { "clear", "paintbrush", "heart", "image", "arrow", "tetris", "snake", "brightness" };
 
 void setup() {
   Serial.begin(115200);
@@ -51,6 +53,7 @@ void setup() {
   image.begin(leds);
   arrow.begin(leds);
   tetris.begin(leds);
+  snake.begin(leds);
   brightness.begin(leds);
 
   server.serveStatic("/", SPIFFS, "/index.html");
