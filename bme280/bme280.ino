@@ -16,9 +16,6 @@
 #define MQTT_DEBUG
 #define MQTT_ERROR
 
-#define AIO_SERVER      "io.adafruit.com"
-#define AIO_SERVERPORT  1883
-
 Adafruit_BME280 bme; // I2C
 WiFiClient client;
 
@@ -26,8 +23,6 @@ Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO
 Adafruit_MQTT_Publish temperature = Adafruit_MQTT_Publish(&mqtt, AIO_FEED_TEMPERATURE);
 Adafruit_MQTT_Publish humidity = Adafruit_MQTT_Publish(&mqtt, AIO_FEED_HUMIDITY);
 
-
-// connect to adafruit io via MQTT
 void connect() {
   Serial.print(F("WiFi: Connecting to "));
   Serial.println(WLAN_SSID);
