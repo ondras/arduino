@@ -4,14 +4,17 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <ESP8266WiFi.h>
+
+#ifdef ESP8266
+  #include <ESP8266WiFi.h>
+#endif
+
+#ifdef ESP32
+  #include <WiFi.h>
+#endif
+
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
-
-#define BMP_SCK 13
-#define BMP_MISO 12
-#define BMP_MOSI 11
-#define BMP_CS 10
 
 #define MQTT_DEBUG
 #define MQTT_ERROR
@@ -37,7 +40,7 @@ void connect() {
   Serial.println(F("WiFi IP address: "));
   Serial.println(WiFi.localIP());
 
-  Serial.print(F("MQTT: Connecting to Adafruit IO... "));
+  Serial.print(F("MQTT: Connecting to broker... "));
   int8_t ret;
   while ((ret = mqtt.connect()) != 0) {
     Serial.println(mqtt.connectErrorString(ret));
@@ -48,7 +51,7 @@ void connect() {
   }
 
   Serial.println();
-  Serial.println(F("MQTT: Adafruit IO Connected!"));
+  Serial.println(F("MQTT: connected!"));
 }
 
 void setup() {
